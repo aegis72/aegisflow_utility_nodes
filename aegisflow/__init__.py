@@ -12,7 +12,7 @@ MANIFEST = {
     "version": (1,0,0),
     "author": "Aegis72",
     "project": "https://majorstudio.gumroad.com",
-    "description": "UtilityNodes for Aegisflow comfyui workflow",
+    "description": "UtilityNodes for Aegisflow comfyui workflow, based heavily on WASquatch's image batch node",
 }
 
 
