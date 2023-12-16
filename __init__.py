@@ -4,6 +4,8 @@
 
 import sys
 import torch
+import numpy as np
+from PIL import Image, ImageFilter
 
 p310_plus = (sys.version_info >= (3, 10))
 
@@ -97,13 +99,6 @@ class aegisflow_latent_pass:
         batched_tensors = torch.cat(batched_tensors, dim=0)
         return (batched_tensors,) 
 
-# A dictionary that contains all nodes you want to export with their names
-# NOTE: names should be globally unique
-NODE_CLASS_MAPPINGS = {
-    "Aegisflow Image Pass": aegisflow_latent_pass,
-}
-
-
 
 #---------------------------------------------------------------------------------------------------------------------#
 #This is an input switch for Controlnet Preprocessors.  Can pick an input and that image will be the one picked for the workflow.
@@ -162,10 +157,145 @@ class af_preproc_chooser:
             return (c11_yourchoice2, )
         
 
+#Developed by Ally - https://www.patreon.com/theally
+#https://civitai.com/user/theally
+
+#This node provides a simple interface to adjust the brightness/contrast of the output image prior to saving
+#many users were having difficulties with both installing and keeping theAlly nodes consistent and so I am integrating the three required them into this node set.
+
+class BrightnessContrast_theAlly:
+    """
+        
+    """
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(s):
+        """
+        Input Types
+
+        """
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "mode": (["brightness", "contrast"],),
+                "strength": ("FLOAT", {"default": 0.5, "min": -1.0, "max": 1.0, "step": 0.01}),           
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "apply_filter"
+
+    CATEGORY = "AegisFlow"
+
+    def apply_filter(self, image, mode, strength):
+
+        # Choose a filter based on the 'mode' value
+        if mode == "brightness":
+            image = np.clip(image + strength, 0.0, 1.0)
+        elif mode == "contrast":
+            image = np.clip(image * strength, 0.0, 1.0)
+        else:
+            print(f"Invalid filter option: {mode}. No changes applied.")
+            return (image,)
+
+        return (image,)
+
+
+#Developed by Ally - https://www.patreon.com/theally
+#https://civitai.com/user/theally
+
+#This node provides a simple interface to flip the image horizontally or vertically prior to saving
+
+class ImageFlip_theAlly:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "flip_type": (["horizontal", "vertical"],),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "flip_image"
+
+    CATEGORY = "AegisFlow"
+
+    def flip_image(self, image, flip_type):
+
+        # Convert the input image tensor to a NumPy array
+        image_np = 255. * image.cpu().numpy().squeeze()
+        
+        if flip_type == "horizontal":
+            flipped_image_np = np.flip(image_np, axis=1)
+        elif flip_type == "vertical":
+            flipped_image_np = np.flip(image_np, axis=0)
+        else:
+            print(f"Invalid flip_type. Must be either 'horizontal' or 'vertical'. No changes applied.")
+            return (image,)
+
+        # Convert the flipped NumPy array back to a tensor
+        flipped_image_np = flipped_image_np.astype(np.float32) / 255.0
+        flipped_image_tensor = torch.from_numpy(flipped_image_np).unsqueeze(0)
+
+        return (flipped_image_tensor,)
+
+#Developed by Ally - https://www.patreon.com/theally
+#https://civitai.com/user/theally
+
+#This node provides a simple interface to apply a gaussian blur approximation (with box blur) to the image prior to output
+
+class GaussianBlur_theAlly:
+    """
+    This node provides a simple interface to apply Gaussian blur to the output image.
+    """
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "apply_filter"
+
+    CATEGORY = "AegisFlow"
+
+    def apply_filter(self, image, strength):
+
+        # Convert the input image tensor to a PIL Image
+        i = 255. * image.cpu().numpy().squeeze()
+        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+
+        # Apply Gaussian blur using the strength value
+        blurred_img = img.filter(ImageFilter.GaussianBlur(radius=strength))
+
+        # Convert the blurred PIL Image back to a tensor
+        blurred_image_np = np.array(blurred_img).astype(np.float32) / 255.0
+        blurred_image_tensor = torch.from_numpy(blurred_image_np).unsqueeze(0)
+
+        return (blurred_image_tensor,)
+
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
     "Aegisflow Image Pass": aegisflow_image_pass,
     "Aegisflow Latent  Pass": aegisflow_latent_pass,    
     "Aegisflow controlnet preprocessor bus": af_preproc_chooser,
+    "Brightness & Contrast_Ally": BrightnessContrast_theAlly,
+    "Image Flip_ally": ImageFlip_theAlly,
+    "Gaussian Blur_Ally": GaussianBlur_theAlly    
 }
