@@ -17,6 +17,63 @@ MANIFEST = {
     "description": "UtilityNodes for Aegisflow comfyui workflow, based heavily on WASquatch's image batch node",
 }
 
+# model PassThrough (Aegis72)
+# this node takes a model as an input and passes it through. It is used for remote
+# targeting with an "Anything Everywhere" node sender
+
+
+class aegisflow_model_pass:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            },
+            "optional": {
+                "model": ("MODEL",),
+            },
+        }
+
+    RETURN_TYPES = ("MODEL",)
+    RETURN_NAMES = ("model pass-->",)
+    FUNCTION = "model_passer"
+    CATEGORY = "AegisFlow"
+ 
+    def seed_passer(self, **kwargs):
+        modelname = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (modelname) 
+
+# vae PassThrough (Aegis72)
+# this node takes a vae as an input and passes it through. It is used for remote
+# targeting with an "Anything Everywhere" node sender
+
+
+class aegisflow_vae_pass:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            },
+            "optional": {
+                "vae": ("VAE",),
+            },
+        }
+
+    RETURN_TYPES = ("VAE",)
+    RETURN_NAMES = ("vae pass-->",)
+    FUNCTION = "vae_passer"
+    CATEGORY = "AegisFlow"
+ 
+    def vae_passer(self, **kwargs):
+        vaename = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (vaename) 
+
+
 
 class aegisflow_image_pass:
     def __init__(self):
@@ -293,7 +350,9 @@ class GaussianBlur_theAlly:
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
     "Aegisflow Image Pass": aegisflow_image_pass,
-    "Aegisflow Latent  Pass": aegisflow_latent_pass,    
+    "Aegisflow Latent Pass": aegisflow_latent_pass,
+    "Aegisflow Model Pass": aegisflow_model_pass,
+    "Aegisflow VAE Pass": aegisflow_vae_pass,
     "Aegisflow controlnet preprocessor bus": af_preproc_chooser,
     "Brightness & Contrast_Ally": BrightnessContrast_theAlly,
     "Image Flip_ally": ImageFlip_theAlly,
