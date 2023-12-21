@@ -17,6 +17,39 @@ MANIFEST = {
     "description": "UtilityNodes for Aegisflow comfyui workflow, based heavily on WASquatch's image batch node",
 }
 
+class aegisflow_multi_pass:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            },
+            "optional": {
+                "image": ("IMAGE",),
+                "mask": ("MASK",),
+                "latent": ("LATENT",),
+                "model": ("MODEL",),                
+                "vae": ("VAE",),
+                "clip": ("CLIP",),
+                "positive": ("CONDITIONING",),
+                "negative": ("CONDITIONING",),
+                "sdxl tuple": ("SDXL_TUPLE",),
+
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE","MASK","LATENT","MODEL","VAE", "CLIP", "CONDITIONING","CONDITIONING","SDXL_TUPLE",)
+    RETURN_NAMES = ("image","mask","latent","model","vae", "clip", "positive","negative", "sdxl tuple",)
+    FUNCTION = "af_passnodes"
+    CATEGORY = "AegisFlow"
+ 
+    def af_passnodes(self, **kwargs):
+        passnodes_name = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (passnodes_name) 
+
+
 # model PassThrough (Aegis72)
 # this node takes a model as an input and passes it through. It is used for remote
 # targeting with an "Anything Everywhere" node sender
@@ -76,6 +109,7 @@ class aegisflow_vae_pass:
 
 
 class aegisflow_image_pass:
+
     def __init__(self):
         pass
 
@@ -85,38 +119,24 @@ class aegisflow_image_pass:
             "required": {
             },
             "optional": {
-                "image to pass": ("IMAGE",),
+                "image_input": ("IMAGE",),
+                "mask_input": ("MASK",),    
             },
         }
 
-    RETURN_TYPES = ("IMAGE",)
-    RETURN_NAMES = ("image pass-->",)
+    RETURN_TYPES = ("IMAGE","MASK",)
+    RETURN_NAMES = ("image_output","mask_output",)
     FUNCTION = "image_passer"
     CATEGORY = "AegisFlow"
-
-    def _check_image_dimensions(self, tensors, names):
-        dimensions = [tensor.shape for tensor in tensors]
-        if len(set(dimensions)) > 1:
-            mismatched_indices = [i for i, dim in enumerate(dimensions) if dim[1:] != dimensions[0][1:]]
-            mismatched_images = [names[i] for i in mismatched_indices]
-            if mismatched_images:
-                raise ValueError(f"Image pass Warning: Input image dimensions do not match for images: {mismatched_images}")
-
+    
     def image_passer(self, **kwargs):
-        batched_tensors = [kwargs[key] for key in kwargs if kwargs[key] is not None]
-        image_names = [key for key in kwargs if kwargs[key] is not None]
-
-        if not batched_tensors:
-            raise ValueError("AEGISFLOW IMAGE PASS MESSAGE: At least one input image must be provided. The most likely cause of this is that your image name in the passer node (blue) does not match the name you have in the black image pass node in your sampler. Check for typos; it must match the name exactly, or conform to a regex pattern.")
-
-        self._check_image_dimensions(batched_tensors, image_names)
-        batched_tensors = torch.cat(batched_tensors, dim=0)
-        return (batched_tensors,) 
+        imagename = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (imagename)  
+    
 
 # LATENT PassThrough (Aegis72)
 # this node takes an latent as an input and passes it through. It is used for remote
 # targeting with an "Anything Everywhere" node sender
-
 
 class aegisflow_latent_pass:
     def __init__(self):
@@ -136,25 +156,38 @@ class aegisflow_latent_pass:
     RETURN_NAMES = ("latent pass-->",)
     FUNCTION = "latent_passer"
     CATEGORY = "AegisFlow"
- 
-    def _check_image_dimensions(self, tensors, names):
-        dimensions = [tensor.shape for tensor in tensors]
-        if len(set(dimensions)) > 1:
-            mismatched_indices = [i for i, dim in enumerate(dimensions) if dim[1:] != dimensions[0][1:]]
-            mismatched_images = [names[i] for i in mismatched_indices]
-            if mismatched_images:
-                raise ValueError(f"Image pass Warning: Input image dimensions do not match for images: {mismatched_images}")
- 
+
     def latent_passer(self, **kwargs):
-        batched_tensors = [kwargs[key] for key in kwargs if kwargs[key] is not None]
-        image_names = [key for key in kwargs if kwargs[key] is not None]
+        latentname = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (latentname)  
+    
+# MASK PassThrough (Aegis72)
+# this node takes a mask as an input and passes it through. It is used for remote
+# targeting with an "Anything Everywhere" node sender
 
-        if not batched_tensors:
-            raise ValueError("AEGISFLOW IMAGE PASS MESSAGE: At least one input image must be provided. The most likely cause of this is that your image name in the passer node (blue) does not match the name you have in the black image pass node in your sampler. Check for typos; it must match the name exactly, or conform to a regex pattern.")
 
-        self._check_image_dimensions(batched_tensors, image_names)
-        batched_tensors = torch.cat(batched_tensors, dim=0)
-        return (batched_tensors,) 
+class aegisflow_mask_pass:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            },
+            "optional": {
+                "mask to pass": ("MASK",),
+            },
+        }
+
+    RETURN_TYPES = ("MASK",)
+    RETURN_NAMES = ("mask pass-->",)
+    FUNCTION = "mask_passer"
+    CATEGORY = "AegisFlow"
+
+    def mask_passer(self, **kwargs):
+        maskname = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (maskname)  
 
 
 #---------------------------------------------------------------------------------------------------------------------#
@@ -302,6 +335,7 @@ class ImageFlip_theAlly:
 
         return (flipped_image_tensor,)
 
+
 #Developed by Ally - https://www.patreon.com/theally
 #https://civitai.com/user/theally
 
@@ -345,10 +379,12 @@ class GaussianBlur_theAlly:
         blurred_image_tensor = torch.from_numpy(blurred_image_np).unsqueeze(0)
 
         return (blurred_image_tensor,)
+    
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
+    "aegisflow Multi_Pass": aegisflow_multi_pass,
     "Aegisflow Image Pass": aegisflow_image_pass,
     "Aegisflow Latent Pass": aegisflow_latent_pass,
     "Aegisflow Model Pass": aegisflow_model_pass,
