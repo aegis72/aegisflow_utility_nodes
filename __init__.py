@@ -11,7 +11,7 @@ p310_plus = (sys.version_info >= (3, 10))
 
 MANIFEST = {
     "name": "Aegisflow Utility Nodes",
-    "version": (1,0,0),
+    "version": (1,1,0),
     "author": "Aegis72",
     "project": "https://majorstudio.gumroad.com",
     "description": "UtilityNodes for Aegisflow comfyui workflow, based heavily on WASquatch's image batch node",
@@ -415,7 +415,7 @@ class af_placeholdertuple:
                             "[-0.2866, -0.5871, -1.4560,  ..., -0.6451, -1.7306,  0.2990]]]), {'pooled_output': None}]], " \
                             "None, None, None, None)"
         result = tuple(provided_tuple_string.split(", "))
-        return (result,)
+        return (result,) 
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
