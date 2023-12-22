@@ -313,7 +313,6 @@ class ImageFlip_theAlly:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "flip_image"
-
     CATEGORY = "AegisFlow"
 
     def flip_image(self, image, flip_type):
@@ -379,7 +378,44 @@ class GaussianBlur_theAlly:
         blurred_image_tensor = torch.from_numpy(blurred_image_np).unsqueeze(0)
 
         return (blurred_image_tensor,)
-    
+
+class af_placeholdertuple:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+            return {
+            "required": {
+            },
+            "optional": {
+            },
+        }
+    RETURN_TYPES = ("SDXL_TUPLE",)
+    FUNCTION = "placeholdertuple"
+    CATEGORY = "AegisFlow"
+
+    def placeholdertuple(self,):
+        
+        provided_tuple_string = "(<comfy.model_patcher.ModelPatcher object at 0x00000215AF92E410>, " \
+                            "<comfy.sd.CLIP object at 0x0000021582576110>, " \
+                            "[[tensor([[[-0.3921,  0.0278, -0.0675,  ..., -0.4916, -0.3165,  0.0655], " \
+                            "[-0.6300, -0.3306,  0.3012,  ...,  0.2379, -0.3163,  0.4271], " \
+                            "[ 0.2102,  0.3428,  0.3694,  ..., -1.1688, -1.4279, -0.7521], " \
+                            "..., " \
+                            "[-0.3279, -0.1775, -1.6074,  ..., -0.3802, -1.1385, -0.0408], " \
+                            "[-0.3222, -0.1721, -1.5919,  ..., -0.3691, -1.1436, -0.0270], " \
+                            "[-0.3520, -0.0728, -1.5434,  ..., -0.3932, -1.0915, -0.0713]]]), {'pooled_output': None}]], " \
+                            "[[tensor([[[-0.3921,  0.0278, -0.0675,  ..., -0.4916, -0.3165,  0.0655], " \
+                            "[-0.6300, -0.3306,  0.3012,  ...,  0.2379, -0.3163,  0.4271], " \
+                            "[ 0.2102,  0.3428,  0.3694,  ..., -1.1688, -1.4279, -0.7521], " \
+                            "..., " \
+                            "[-0.2891, -0.6821, -1.5167,  ..., -0.6290, -1.7984,  0.3385], " \
+                            "[-0.2864, -0.6799, -1.5096,  ..., -0.6233, -1.7977,  0.3522], " \
+                            "[-0.2866, -0.5871, -1.4560,  ..., -0.6451, -1.7306,  0.2990]]]), {'pooled_output': None}]], " \
+                            "None, None, None, None)"
+        result = tuple(provided_tuple_string.split(", "))
+        return (result,)
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
@@ -392,5 +428,6 @@ NODE_CLASS_MAPPINGS = {
     "Aegisflow controlnet preprocessor bus": af_preproc_chooser,
     "Brightness & Contrast_Ally": BrightnessContrast_theAlly,
     "Image Flip_ally": ImageFlip_theAlly,
-    "Gaussian Blur_Ally": GaussianBlur_theAlly    
+    "Gaussian Blur_Ally": GaussianBlur_theAlly,
+    "Placeholder Tuple": af_placeholdertuple 
 }
