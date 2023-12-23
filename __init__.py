@@ -270,7 +270,8 @@ class BrightnessContrast_theAlly:
             "required": {
                 "image": ("IMAGE",),
                 "mode": (["brightness", "contrast"],),
-                "strength": ("FLOAT", {"default": 0.5, "min": -1.0, "max": 1.0, "step": 0.01}),           
+                "strength": ("FLOAT", {"default": 0.5, "min": -1.0, "max": 1.0, "step": 0.01}),
+                "enabled": ("BOOLEAN", {"default": True},),           
             },
         }
 
@@ -279,18 +280,19 @@ class BrightnessContrast_theAlly:
 
     CATEGORY = "AegisFlow"
 
-    def apply_filter(self, image, mode, strength):
+    def apply_filter(self, image, mode, strength, enabled):
 
         # Choose a filter based on the 'mode' value
-        if mode == "brightness":
-            image = np.clip(image + strength, 0.0, 1.0)
-        elif mode == "contrast":
-            image = np.clip(image * strength, 0.0, 1.0)
+        if enabled:
+            if mode == "brightness":
+                image = np.clip(image + strength, 0.0, 1.0)
+            elif mode == "contrast":
+                image = np.clip(image * strength, 0.0, 1.0)
+            else:
+                print(f"Invalid filter option: {mode}. No changes applied.")
+                return (image,)
         else:
-            print(f"Invalid filter option: {mode}. No changes applied.")
             return (image,)
-
-        return (image,)
 
 
 #Developed by Ally - https://www.patreon.com/theally
@@ -308,6 +310,7 @@ class ImageFlip_theAlly:
             "required": {
                 "image": ("IMAGE",),
                 "flip_type": (["horizontal", "vertical"],),
+                "enabled": ("BOOLEAN", {"default": True},),
             },
         }
 
@@ -315,19 +318,22 @@ class ImageFlip_theAlly:
     FUNCTION = "flip_image"
     CATEGORY = "AegisFlow"
 
-    def flip_image(self, image, flip_type):
+    def flip_image(self, image, flip_type, enabled):
 
         # Convert the input image tensor to a NumPy array
         image_np = 255. * image.cpu().numpy().squeeze()
         
-        if flip_type == "horizontal":
-            flipped_image_np = np.flip(image_np, axis=1)
-        elif flip_type == "vertical":
-            flipped_image_np = np.flip(image_np, axis=0)
+        if enabled:
+            if flip_type == "horizontal":
+                flipped_image_np = np.flip(image_np, axis=1)
+            elif flip_type == "vertical":
+                flipped_image_np = np.flip(image_np, axis=0)
+            else:
+                print(f"Invalid flip_type. Must be either 'horizontal' or 'vertical'. No changes applied.")
+                return (image,)
         else:
-            print(f"Invalid flip_type. Must be either 'horizontal' or 'vertical'. No changes applied.")
             return (image,)
-
+        
         # Convert the flipped NumPy array back to a tensor
         flipped_image_np = flipped_image_np.astype(np.float32) / 255.0
         flipped_image_tensor = torch.from_numpy(flipped_image_np).unsqueeze(0)
@@ -356,6 +362,7 @@ class GaussianBlur_theAlly:
             "required": {
                 "image": ("IMAGE",),
                 "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 200.0, "step": 0.01}),
+                "enabled": ("BOOLEAN", {"default": True},),
             },
         }
 
@@ -364,20 +371,25 @@ class GaussianBlur_theAlly:
 
     CATEGORY = "AegisFlow"
 
-    def apply_filter(self, image, strength):
+    def apply_filter(self, image, strength, enabled):
 
         # Convert the input image tensor to a PIL Image
-        i = 255. * image.cpu().numpy().squeeze()
-        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        if enabled:
+            i = 255. * image.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
 
-        # Apply Gaussian blur using the strength value
-        blurred_img = img.filter(ImageFilter.GaussianBlur(radius=strength))
+            # Apply Gaussian blur using the strength value
+            blurred_img = img.filter(ImageFilter.GaussianBlur(radius=strength))
 
-        # Convert the blurred PIL Image back to a tensor
-        blurred_image_np = np.array(blurred_img).astype(np.float32) / 255.0
-        blurred_image_tensor = torch.from_numpy(blurred_image_np).unsqueeze(0)
+            # Convert the blurred PIL Image back to a tensor
+            blurred_image_np = np.array(blurred_img).astype(np.float32) / 255.0
+            blurred_image_tensor = torch.from_numpy(blurred_image_np).unsqueeze(0)
+            return (blurred_image_tensor,)
+        else:
+            return (image,)
 
-        return (blurred_image_tensor,)
+
+
 
 class af_placeholdertuple:
     def __init__(self):
