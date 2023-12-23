@@ -355,7 +355,7 @@ class GaussianBlur_theAlly:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
+                "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 200.0, "step": 0.01}),
             },
         }
 
