@@ -290,7 +290,7 @@ class BrightnessContrast_theAlly:
                 image = np.clip(image * strength, 0.0, 1.0)
             else:
                 print(f"Invalid filter option: {mode}. No changes applied.")
-                return (image,)
+            return (image,)
         else:
             return (image,)
 
