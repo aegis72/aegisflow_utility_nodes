@@ -41,7 +41,7 @@ class aegisflow_multi_pass:
         }
 
     RETURN_TYPES = ("IMAGE","MASK","LATENT","MODEL","VAE", "CLIP", "CONDITIONING","CONDITIONING","SDXL_TUPLE",)
-    RETURN_NAMES = ("image","mask","latent","model","vae", "clip", "positive","negative", "sdxl tuple",)
+    RETURN_NAMES = ("image","mask","latent","model","vae", "clip", "positive", "negative", "sdxl tuple",)
     FUNCTION = "af_passnodes"
     CATEGORY = "AegisFlow"
  
@@ -70,13 +70,42 @@ class aegisflow_model_pass:
         }
 
     RETURN_TYPES = ("MODEL",)
-    RETURN_NAMES = ("model pass-->",)
+    RETURN_NAMES = ("model",)
     FUNCTION = "model_passer"
     CATEGORY = "AegisFlow"
  
-    def seed_passer(self, **kwargs):
+    def model_passer(self, **kwargs):
         modelname = [kwargs[key] for key in kwargs if kwargs[key] is not None]
         return (modelname) 
+    
+# model PassThrough (Aegis72)
+# this node takes a model as an input and passes it through. It is used for remote
+# targeting with an "Anything Everywhere" node sender
+
+
+class aegisflow_clip_pass:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            },
+            "optional": {
+                "clip": ("CLIP",),
+            },
+        }
+
+    RETURN_TYPES = ("CLIP",)
+    RETURN_NAMES = ("clip",)
+    FUNCTION = "clip_passer"
+    CATEGORY = "AegisFlow"
+ 
+    def clip_passer(self, **kwargs):
+        clipname = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        return (clipname) 
+
 
 # vae PassThrough (Aegis72)
 # this node takes a vae as an input and passes it through. It is used for remote
@@ -98,7 +127,7 @@ class aegisflow_vae_pass:
         }
 
     RETURN_TYPES = ("VAE",)
-    RETURN_NAMES = ("vae pass-->",)
+    RETURN_NAMES = ("vae",)
     FUNCTION = "vae_passer"
     CATEGORY = "AegisFlow"
  
@@ -153,7 +182,7 @@ class aegisflow_latent_pass:
         }
 
     RETURN_TYPES = ("LATENT",)
-    RETURN_NAMES = ("latent pass-->",)
+    RETURN_NAMES = ("latent pass",)
     FUNCTION = "latent_passer"
     CATEGORY = "AegisFlow"
 
@@ -437,6 +466,7 @@ NODE_CLASS_MAPPINGS = {
     "Aegisflow Latent Pass": aegisflow_latent_pass,
     "Aegisflow Model Pass": aegisflow_model_pass,
     "Aegisflow VAE Pass": aegisflow_vae_pass,
+    "Aegisflow CLIP Pass": aegisflow_clip_pass,
     "Aegisflow controlnet preprocessor bus": af_preproc_chooser,
     "Brightness & Contrast_Ally": BrightnessContrast_theAlly,
     "Image Flip_ally": ImageFlip_theAlly,
