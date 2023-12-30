@@ -46,8 +46,9 @@ class aegisflow_multi_pass:
     CATEGORY = "AegisFlow"
  
     def af_passnodes(self, **kwargs):
-        passnodes_name = [kwargs[key] for key in kwargs if kwargs[key] is not None]
-        return (passnodes_name) 
+        output_order = ("image","mask","latent","model","vae", "clip", "positive", "negative", "sdxl tuple",)
+        passnodes_name = [kwargs.setdefault(key, '0') for key in output_order]
+        return (passnodes_name)
 
 
 # model PassThrough (Aegis72)
