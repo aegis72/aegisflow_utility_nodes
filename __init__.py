@@ -474,3 +474,6 @@ NODE_CLASS_MAPPINGS = {
     "Gaussian Blur_Ally": GaussianBlur_theAlly,
     "Placeholder Tuple": af_placeholdertuple 
 }
+
+WEB_DIRECTORY = "./js"
+__all__ = ["NODE_CLASS_MAPPINGS", "WEB_DIRECTORY"]
