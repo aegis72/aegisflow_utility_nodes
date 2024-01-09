@@ -18,7 +18,7 @@ I was having many users unable to satisfy some great nodes from the ally and thu
 
 
 ## Auto Grouping of Nodes placed as templates
-Thanks to mortael, we now have nodes that group automaticallywhen placed in a template, and name themselves after the template name. This is a key QOL improvement that also ensures we can take full advantage of Chris Goringe's Use Everywhere nodes using AegisFlow Shima, which recently added in execution control via group name.
+Thanks to the positronic matrix of mortael,  we now have nodes that group automatically when placed in a template, and name themselves after the template name. This is a key QOL improvement that also ensures we can take full advantage of Chris Goringe's Use Everywhere nodes using AegisFlow Shima, which recently added in execution control via group name.
 
 ![autogrouping](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/4147c1c1-2170-474c-b750-55545184ed9b)
 
