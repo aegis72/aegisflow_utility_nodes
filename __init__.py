@@ -136,7 +136,9 @@ class aegisflow_vae_pass:
         vaename = [kwargs[key] for key in kwargs if kwargs[key] is not None]
         return (vaename) 
 
-
+# LATENT PassThrough (Aegis72)
+# this node takes an image and mask as an input and passes it through. It is used for remote
+# targeting with an "Anything Everywhere" node sender
 
 class aegisflow_image_pass:
 
@@ -464,7 +466,8 @@ class af_placeholdertuple:
 NODE_CLASS_MAPPINGS = {
     "aegisflow Multi_Pass": aegisflow_multi_pass,
     "Aegisflow Image Pass": aegisflow_image_pass,
-    "Aegisflow Latent Pass": aegisflow_latent_pass,
+    "Aegisflow Mask Pass": aegisflow_mask_pass,
+    "Aegisflow Latent Pass": aegisflow_latent_pass,    
     "Aegisflow Model Pass": aegisflow_model_pass,
     "Aegisflow VAE Pass": aegisflow_vae_pass,
     "Aegisflow CLIP Pass": aegisflow_clip_pass,
