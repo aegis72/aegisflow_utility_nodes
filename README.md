@@ -14,7 +14,8 @@ There is also the "multipasser" which gangs them all together so they can be col
 ## Ally's Nodes, with an extension
 I was having many users unable to satisfy some great nodes from the ally and thusly integrated them here, and also needed a way to turn them on/off easily, so I extended them with an "enable/disable" switch. 
 
-![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/ad774985-5e01-4a6b-8a7c-147ae0f9a302)
+![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/47c31292-29ad-44ff-b83c-6926d75af68a)
+
 
 ## Auto Grouping of Nodes placed as templates
 Thanks to mortael, we now have nodes that group automaticallywhen placed in a template, and name themselves after the template name. This is a key QOL improvement that also ensures we can take full advantage of Chris Goringe's Use Everywhere nodes using AegisFlow Shima, which recently added in execution control via group name.
