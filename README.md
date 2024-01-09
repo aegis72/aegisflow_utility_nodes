@@ -28,7 +28,7 @@ Thanks to the positronic matrix of Dutch Dev mortael,  we now have nodes that gr
 
 
 ## Auto Contrast node text contrast
-Do you hate the color palette limitations of ComfyUI? I DO. I hate that "yellow" is considered that "burnt ochre" color that you threw away from your crayons because it's so gross. Problem is, until now that was all it could be: the color of the text is grey and the text of the coloring shall be grey. It meant that without developing an entirely new theme, you couldn't use high-brightness colors at all.
+Do you hate the color palette limitations of LiteGraph? I DO. I hate that "yellow" is considered that "burnt ochre" color that you threw away from your crayons because it's so gross. Problem is, until now that was all it could be: the color of the text is grey and the text of the coloring shall be grey. It meant that without developing an entirely new theme, you couldn't use high-brightness colors at all.
 
 ![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/caea02a0-1872-4356-bccd-efa6efdd7594)
 
