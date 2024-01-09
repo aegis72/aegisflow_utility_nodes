@@ -1,10 +1,14 @@
 # aegisflow_utility_nodes
 The Utility nodes have a variety of "Passer" nodes that can both passs through items targeted by Use Everywhere nodes, as well as secure an input that requires one. This is necessary because Comfy will try to "fix" those inputs using any output that matches, even if that doesn't work, breaking the wf (this is an "all workflows problem, not an AegisFlow problem.
 
-Most commonly used is an "image" passer, but you can do others like latenst, etc.
+Most commonly used is an "image" passer, but you can do others like latents,masks, CLIP etc. There is also a "Placeholder Tuple" for times when you need to fill a Tuple but aren't going to actually use it. This is helpful in developing template workflows that are frequently broken when inputs are left unoccupied (ask me how I know?)
+
+![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/f1157839-d454-4622-b5cd-b39a26678fec)
+
 
 There is also the "multipasser" which gangs them all together so they can be collapsed into the "superlaser."
 
+![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/21eeb471-9247-4463-aca8-5437e1f6640a)
 
 
 Ally's Nodes, with an extension.
