@@ -21,12 +21,13 @@ Thanks to mortael, we now have nodes that group automaticallywhen placed in a te
 
 
 ## Auto Contrast node text contrast
-Do you hate the color palette limitations of ComfyUI? I DO. I hate that "yellow" is considered that "burnt ochre" color that you threw away from your crayons because it's so gross. Problem is, until now that was all it could be: the color of the text is greay and the text of the coloring shall be grey. It meant that without developing an entirely new theme, you couldn't use high-brightness colors at all.
+Do you hate the color palette limitations of ComfyUI? I DO. I hate that "yellow" is considered that "burnt ochre" color that you threw away from your crayons because it's so gross. Problem is, until now that was all it could be: the color of the text is grey and the text of the coloring shall be grey. It meant that without developing an entirely new theme, you couldn't use high-brightness colors at all.
 
 ![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/caea02a0-1872-4356-bccd-efa6efdd7594)
 
+But you might have noticed in the first image in the readme that you can actually read those nodes...
 
-The world was a dark place. It was a dark time. But now, color can come back into your WFs:
+The world used to be a dark place. But now, color can come back into your WFs, opening new possibilities for usability:
 
 ![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/23d4439c-1848-4976-8137-d8e727cdb5ce)
 
