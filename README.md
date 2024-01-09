@@ -38,6 +38,6 @@ The world used to be a dark place. But now, color can come back into your WFs, o
 
 The Utility Nodes are a free community resource, as is the classic version of AegisFlow. I'll also be releasing the "Simple 1.5 Workflow" for AegisFlow Shima for folks to test.
 
-That said, my kids like to be able to eat, and you can support me through a Major Studio membership or a one-time $15 payment at majorstudio.gumroad.com that will get you the entire death star and future updates, new modules, and enhancements like our upcoming installer and updater application (not out just yet; it is WIP):
+That said, my kids like to be able to eat, and you can support me through a Major Studio membership or a one-time $15 payment at [majorstudio.gumroad.com](https://majorsyudio.gumroad.com) that will get you the entire death star and future updates, new modules, and enhancements like our upcoming installer and updater application (not out just yet; it is WIP):
 
 ![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/61650b58-a394-46b4-84b9-da20fb12991f)
