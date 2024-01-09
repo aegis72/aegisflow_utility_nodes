@@ -10,10 +10,9 @@ Most commonly used is an "image" passer, but you can do others like latents, mas
 ![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/f1157839-d454-4622-b5cd-b39a26678fec)
 
 
-There is also the "multipasser" which gangs them all together so they can be collapsed into the "superlaser."
+The "multipasser" which gangs them all together so they can be collapsed into the "superlaser."
 
-![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/21eeb471-9247-4463-aca8-5437e1f6640a)
-
+![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/4ad427f6-15e4-4a26-baa2-d4b6d7610dbe)
 
 ## Ally's Nodes, with an extension
 I was having many users unable to satisfy some great nodes from the ally and thusly integrated them here, and also needed a way to turn them on/off easily, so I extended them with an "enable/disable" switch. 
