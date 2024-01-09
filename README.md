@@ -1,5 +1,9 @@
 # aegisflow_utility_nodes
+These nodes were created to solve challenges in developing AegisFlow Shima, a modular ComfyUI workflow building system. But you might find them useful in your own workflows, so have at them!
+
+## Passers and Placeholders
 The Utility nodes have a variety of "Passer" nodes that can both passs through items targeted by Use Everywhere nodes, as well as secure an input that requires one. This is necessary because Comfy will try to "fix" those inputs using any output that matches, even if that doesn't work, breaking the wf (this is an "all workflows problem, not an AegisFlow problem.
+The key thing is that the INPUTS of these passers are optional, and as such they don't trigger whatever "autofixing" seems to go on behind the scenes. They are a bit of a namable target AND a plug for the end of a cell's receptors, preventing the WF disease of "let's just wire this to that for giggles."
 
 Most commonly used is an "image" passer, but you can do others like latents,masks, CLIP etc. There is also a "Placeholder Tuple" for times when you need to fill a Tuple but aren't going to actually use it. This is helpful in developing template workflows that are frequently broken when inputs are left unoccupied (ask me how I know?)
 
