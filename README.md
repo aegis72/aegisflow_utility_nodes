@@ -38,6 +38,8 @@ The world used to be a dark place. But now, color can come back into your WFs, o
 
 ![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/23d4439c-1848-4976-8137-d8e727cdb5ce)
 
+Note: Zero consideration was made for the eye-destroying light theme. Only the Dark Side here.
+
 ## Where do you get all these wonderful toys?
 
 The Utility Nodes are a free community resource, as is the classic version of AegisFlow. I'll also be releasing the "Simple 1.5 Workflow" for AegisFlow Shima for folks to test.
