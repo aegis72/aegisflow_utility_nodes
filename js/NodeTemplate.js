@@ -123,6 +123,7 @@ app.registerExtension({
                 var color = this.current_node.color || "#222";
                 this.node_title_color = getContrastColor(color);
                 LiteGraph.NODE_TEXT_COLOR = getContrastColor(color);
+                LiteGraph.NODE_SELECTED_TITLE_COLOR = getContrastColor(color);
                 originaldrawNodeShape.apply(this, arguments);
             };
         }, 0);
