@@ -7,7 +7,6 @@ import torch
 import numpy as np
 from PIL import Image, ImageFilter
 
-
 p310_plus = (sys.version_info >= (3, 10))
 
 MANIFEST = {
