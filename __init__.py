@@ -44,7 +44,7 @@ class aegisflow_multi_pass:
     RETURN_TYPES = ("IMAGE", "MASK", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "SDXL_TUPLE",)
     RETURN_NAMES = ("image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "sdxl tuple",)
     FUNCTION = "af_passnodes"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def af_passnodes(self, **kwargs):
         output_order = ("image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "sdxl tuple",)
@@ -73,7 +73,7 @@ class aegisflow_model_pass:
     RETURN_TYPES = ("MODEL",)
     RETURN_NAMES = ("model",)
     FUNCTION = "model_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def model_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
@@ -100,7 +100,7 @@ class aegisflow_clip_pass:
     RETURN_TYPES = ("CLIP",)
     RETURN_NAMES = ("clip",)
     FUNCTION = "clip_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def clip_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
@@ -128,7 +128,7 @@ class aegisflow_posneg_pass:
     RETURN_TYPES = ("CONDITIONING","CONDITIONING",)
     RETURN_NAMES = ("positive","negative",)
     FUNCTION = "posneg_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def posneg_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
@@ -155,7 +155,7 @@ class aegisflow_cond_pass:
     RETURN_TYPES = ("CONDITIONING",)
     RETURN_NAMES = ("conditioning",)
     FUNCTION = "conditioning_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def conditioning_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
@@ -182,7 +182,7 @@ class aegisflow_sdxltuple_pass:
     RETURN_TYPES = ("SDXL_TUPLE",)
     RETURN_NAMES = ("sdxl tuple",)
     FUNCTION = "tuple_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def tuple_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None]     
@@ -210,7 +210,7 @@ class aegisflow_vae_pass:
     RETURN_TYPES = ("VAE",)
     RETURN_NAMES = ("vae",)
     FUNCTION = "vae_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def vae_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
@@ -235,7 +235,7 @@ class aegisflow_image_pass:
     RETURN_TYPES = ("IMAGE", "MASK",)
     RETURN_NAMES = ("image", "mask",)
     FUNCTION = "image_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def image_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None]  
@@ -262,7 +262,7 @@ class aegisflow_latent_pass:
     RETURN_TYPES = ("LATENT",)
     RETURN_NAMES = ("latent",)
     FUNCTION = "latent_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def latent_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None]  
@@ -289,7 +289,7 @@ class aegisflow_mask_pass:
     RETURN_TYPES = ("MASK",)
     RETURN_NAMES = ("mask",)
     FUNCTION = "mask_passer"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def mask_passer(self, **kwargs):
         return [kwargs[key] for key in kwargs if kwargs[key] is not None]  
@@ -324,7 +324,7 @@ class af_preproc_chooser:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "af_preproc_chooser"
-    CATEGORY = "AegisFlow/passers"
+    CATEGORY = "AegisFlow"
 
     def af_preproc_chooser(self, Input, to_process=None, c1_passthrough=None, c2_normal_lineart=None, c3_anime_lineart=None, c4_manga_lineart=None, c5_midas_depthmap=None, c6_color_palette=None, c7_canny_edge=None, c8_openpose_recognizer=None, c9_scribble_lines=None, c10_yourchoice1=None, c11_yourchoice2=None,):
         if Input == 1:
@@ -379,7 +379,7 @@ class BrightnessContrast_theAlly:
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "apply_filter"
 
-    CATEGORY = "AegisFlow/fx"
+    CATEGORY = "AegisFlow"
 
     def apply_filter(self, image, mode, strength, enabled):
         # Choose a filter based on the 'mode' value
@@ -414,7 +414,7 @@ class ImageFlip_theAlly:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "flip_image"
-    CATEGORY = "AegisFlow/fx"
+    CATEGORY = "AegisFlow"
 
     def flip_image(self, image, flip_type, enabled):
 
@@ -466,7 +466,7 @@ class GaussianBlur_theAlly:
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "apply_filter"
 
-    CATEGORY = "AegisFlow/fx"
+    CATEGORY = "AegisFlow"
 
     def apply_filter(self, image, strength, enabled):
 
@@ -497,7 +497,7 @@ class af_placeholdertuple:
 
     RETURN_TYPES = ("SDXL_TUPLE",)
     FUNCTION = "placeholdertuple"
-    CATEGORY = "AegisFlow/placeholders"
+    CATEGORY = "AegisFlow"
 
     def placeholdertuple(self,):
 
