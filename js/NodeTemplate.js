@@ -107,6 +107,7 @@ app.registerExtension({
                                         addNodesToGroup(group, app.canvas.selected_nodes)
                                         app.canvas.graph.add(group);
                                         app.canvas.graph.change();
+                                        LGraphCanvas.active_canvas.deselectAllNodes();
                                     }
                                 }, 500);
                             };
