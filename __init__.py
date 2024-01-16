@@ -537,11 +537,29 @@ NODE_CLASS_MAPPINGS = {
     "Aegisflow Pos/Neg Pass": aegisflow_posneg_pass,
     "Aegisflow SDXL Tuple Pass": aegisflow_sdxltuple_pass,    
     "Aegisflow controlnet preprocessor bus": af_preproc_chooser,
-    "Brightness & Contrast_Ally": BrightnessContrast_theAlly,
+    "Brightness_Contrast_Ally": BrightnessContrast_theAlly,
     "Image Flip_ally": ImageFlip_theAlly,
     "Gaussian Blur_Ally": GaussianBlur_theAlly,
     "Placeholder Tuple": af_placeholdertuple
 }
 
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "aegisflow Multi_Pass": "multi pass",
+    "Aegisflow Image Pass": "image pass",
+    "Aegisflow Mask Pass": "mask pass",
+    "Aegisflow Latent Pass": "latent pass",
+    "Aegisflow Model Pass": "model pass",
+    "Aegisflow VAE Pass": "vae pass",
+    "Aegisflow CLIP Pass": "clip pass",
+    "Aegisflow Conditioning Pass": "conditioning pass",
+    "Aegisflow Pos/Neg Pass": "posneg pass",
+    "Aegisflow SDXL Tuple Pass": "sdxl tuple pass",    
+    "Aegisflow controlnet preprocessor bus": "controlnet preprocessor bus",
+    "Brightness_Contrast_Ally": "brightness contrast",
+    "Image Flip_ally": "imageflip",
+    "Gaussian Blur_Ally": "gaussian blur",
+    "Placeholder Tuple": "placeholder tuple"
+}
+
 WEB_DIRECTORY = "./js"
-__all__ = ["NODE_CLASS_MAPPINGS", "WEB_DIRECTORY"]
+__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
