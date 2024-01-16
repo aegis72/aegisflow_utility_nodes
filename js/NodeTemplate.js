@@ -107,11 +107,32 @@ app.registerExtension({
                                         addNodesToGroup(group, app.canvas.selected_nodes)
                                         app.canvas.graph.add(group);
                                         app.canvas.graph.change();
+                                        LGraphCanvas.active_canvas.deselectAllNodes();
                                     }
                                 }, 500);
                             };
                         }
                         return option;
+                    });
+                }
+                return options;
+            };
+
+            const originalGetGroupMenuOptions = LGraphCanvas.prototype.getGroupMenuOptions;
+            LGraphCanvas.prototype.getGroupMenuOptions = function(node) {
+                const options = originalGetGroupMenuOptions.apply(this, arguments);
+                const group = this.graph.getGroupOnPos(this.graph_mouse[0], this.graph_mouse[1]);
+                if (group) {
+                    group.recomputeInsideNodes();
+                    const nodesInGroup = group._nodes;
+                    options.push({
+                        content: `Remove group with nodes`,
+                        callback: () => {
+                            LGraphCanvas.onMenuNodeRemove('', '', '', '', node); // maybe very hacky, but it works :)
+                            nodesInGroup.forEach(node => {
+                                LGraphCanvas.onMenuNodeRemove('', '', '', '', node);
+                            });
+                        }
                     });
                 }
                 return options;
