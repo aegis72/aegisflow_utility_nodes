@@ -104,6 +104,7 @@ app.registerExtension({
                                         clearInterval(intervalId);
                                         var group = new LiteGraph.LGraphGroup();
                                         group.title = option.content;
+                                        group.color = "#454545";
                                         addNodesToGroup(group, app.canvas.selected_nodes)
                                         app.canvas.graph.add(group);
                                         app.canvas.graph.change();
