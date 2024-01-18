@@ -18,6 +18,45 @@ MANIFEST = {
     "description": "UtilityNodes for Aegisflow comfyui workflow, based heavily on WASquatch's image batch node",
 }
 
+#Passer for SDXL
+
+class aegisflow_multi_passxl:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            },
+            "optional": {
+                "image": ("IMAGE",),
+                "mask": ("MASK",),
+                "latent": ("LATENT",),
+                "model": ("MODEL",),                
+                "vae": ("VAE",),
+                "clip": ("CLIP",),
+                "positive": ("CONDITIONING",),
+                "negative": ("CONDITIONING",),
+                "refiner model":("MODEL",),
+                "refiner clip":("CLIP",),
+                "refiner positive":("CONDITIONING",),
+                "refiner negative":("CONDITIONING",),
+                "sdxl tuple": ("SDXL_TUPLE",),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE", "MASK", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "CLIP", "CONDITIONING", "CONDITIONING", "SDXL_TUPLE",)
+    RETURN_NAMES = ("image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "refiner model", "refiner clip", "refiner positive", "refiner negative", "sdxl tuple",)
+    FUNCTION = "af_passnodesxl"
+    CATEGORY = "AegisFlow/passers"
+
+    def af_passnodesxl(self, **kwargs):
+        output_order = ("image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "refiner model", "refiner clip", "refiner positive", "refiner negative", "sdxl tuple",)
+        return [kwargs.setdefault(key, '0') for key in output_order]
+    
+
+#Passer for SD 1.5
 
 class aegisflow_multi_pass:
     def __init__(self):
@@ -527,6 +566,7 @@ class af_placeholdertuple:
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
     "aegisflow Multi_Pass": aegisflow_multi_pass,
+    "aegisflow Multi_Pass XL": aegisflow_multi_passxl,
     "Aegisflow Image Pass": aegisflow_image_pass,
     "Aegisflow Mask Pass": aegisflow_mask_pass,    
     "Aegisflow Latent Pass": aegisflow_latent_pass,
@@ -545,6 +585,7 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "aegisflow Multi_Pass": "multi pass",
+    "aegisflow Multi_Pass XL": "multi pass xl",
     "Aegisflow Image Pass": "image pass",
     "Aegisflow Mask Pass": "mask pass",
     "Aegisflow Latent Pass": "latent pass",
