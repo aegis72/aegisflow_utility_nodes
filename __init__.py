@@ -613,6 +613,67 @@ class af_pipe_out_15:
         image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height = pipe
 
         return (pipe, image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height, discord, )
+    
+class af_pipe_in_xl:
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+            },
+            "optional": {
+                "image": ("IMAGE",),
+                "mask": ("MASK",),
+                "sdxl_tuple": ("SDXL_TUPLE",),
+                "latent": ("LATENT",),
+                "model": ("MODEL",),                
+                "vae": ("VAE",),
+                "clip": ("CLIP",),
+                "positive": ("CONDITIONING",),
+                "negative": ("CONDITIONING",),
+                "refiner_model": ("MODEL",),
+                "refiner_vae": ("VAE",),                                
+                "refiner_clip": ("CLIP",),
+                "refiner_positive": ("CONDITIONING",),
+                "refiner_negative": ("CONDITIONING",),                
+                "image_width": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
+                "image_height": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latent_width": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latent_height": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
+            },
+        }
+
+    RETURN_TYPES = ("PIPE_LINE", "STRING", )
+    RETURN_NAMES = ("pipe", "discord", )
+    FUNCTION = "af_pipe_in_xl"
+    CATEGORY = "AegisFlow/passers"
+
+    def af_pipe_in_xl(self, image=0, sdxl_tuple=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0, refiner_model=0, refiner_vae=0, refiner_clip=0, refiner_positive=0, refiner_negative=0, image_width=0, image_height=0, latent_width=0, latent_height=0):
+        discord = "https://discord.gg/fVQB2XAKTM"
+        pipe_line = (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height)
+
+        return (pipe_line, discord, )
+    
+class af_pipe_out_xl:
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {"pipe": ("PIPE_LINE",)},
+        }
+
+    RETURN_TYPES = ("PIPE_LINE", "IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING", )
+    RETURN_NAMES = ("pipe", "image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative", "image_width", "image_height", "latent_width", "latent_height", "discord link", )
+    FUNCTION = "af_pipe_out_xl"
+    CATEGORY = "AegisFlow/passers"
+
+    def af_pipe_out_xl(self, pipe):
+        discord = "https://discord.gg/fVQB2XAKTM"
+        image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height = pipe
+
+        return (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height, discord, )
+
+
 
 
 # A dictionary that contains all nodes you want to export with their names
@@ -635,7 +696,9 @@ NODE_CLASS_MAPPINGS = {
     "Gaussian Blur_Ally": GaussianBlur_theAlly,
     "Placeholder Tuple": af_placeholdertuple,
     "af_pipe_in_15": af_pipe_in_15,
-    "af_pipe_out_15": af_pipe_out_15
+    "af_pipe_out_15": af_pipe_out_15,
+    "af_pipe_in_xl": af_pipe_in_xl,
+    "af_pipe_out_xl": af_pipe_out_xl    
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -656,7 +719,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Gaussian Blur_Ally": "gaussian blur",
     "Placeholder Tuple": "placeholder tuple",
     "af_pipe_in_15": "MultiPipe 1.5 In",
-    "af_pipe_out_15": "MultiPipe 1.5 Out"
+    "af_pipe_out_15": "MultiPipe 1.5 Out",
+    "af_pipe_in_xl": "MultiPipe XL In",
+    "af_pipe_out_xl": "MultiPipe XL Out"
 }
 
 WEB_DIRECTORY = "./js"
