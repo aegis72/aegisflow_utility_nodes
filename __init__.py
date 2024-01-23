@@ -662,8 +662,8 @@ class af_pipe_out_xl:
             "required": {"pipe": ("PIPE_LINE",)},
         }
 
-    RETURN_TYPES = ("PIPE_LINE", "IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING", )
-    RETURN_NAMES = ("pipe", "image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative", "image_width", "image_height", "latent_width", "latent_height", "discord link", )
+    RETURN_TYPES = ("IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING", )
+    RETURN_NAMES = ("image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative", "image_width", "image_height", "latent_width", "latent_height", "discord link", )
     FUNCTION = "af_pipe_out_xl"
     CATEGORY = "AegisFlow/passers"
 
