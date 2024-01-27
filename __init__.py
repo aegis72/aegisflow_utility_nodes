@@ -563,6 +563,9 @@ class af_placeholdertuple:
     
 class af_pipe_in_15:
 
+    def __init__(self):
+        pass
+
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -616,6 +619,9 @@ class af_pipe_out_15:
     
 class af_pipe_in_xl:
 
+    def __init__(self):
+        pass
+
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -655,6 +661,9 @@ class af_pipe_in_xl:
         return (pipe_line, discord, )
     
 class af_pipe_out_xl:
+
+    def __init__(self):
+        pass
 
     @classmethod
     def INPUT_TYPES(s):
