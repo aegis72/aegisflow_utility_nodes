@@ -580,10 +580,10 @@ class af_pipe_in_15:
                 "clip": ("CLIP",),
                 "positive": ("CONDITIONING",),
                 "negative": ("CONDITIONING",),
-                "image_width": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
-                "image_height": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latent_width": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latent_height": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
+                "imagewidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "imageheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latentwidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latentheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
             },
         }
 
@@ -642,10 +642,10 @@ class af_pipe_in_xl:
                 "refiner_clip": ("CLIP",),
                 "refiner_positive": ("CONDITIONING",),
                 "refiner_negative": ("CONDITIONING",),                
-                "image_width": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
-                "image_height": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latent_width": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latent_height": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "forceInput": True}),
+                "imagewidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "imageheight": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latentwidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latentheight": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
             },
         }
 
