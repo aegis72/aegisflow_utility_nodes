@@ -5,8 +5,10 @@
 import sys
 import torch
 import numpy as np
-from PIL import Image, ImageFilter
-
+from PIL import Image, ImageFilter, ImageDraw, ImageFont
+from PIL import Image
+import subprocess
+import math
 
 p310_plus = (sys.version_info >= (3, 10))
 
@@ -682,6 +684,421 @@ class af_pipe_out_xl:
 
         return (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height, discord, )
 
+# Vextra Nodes; These are having issues being imported due to some errors occurring on the original nodes; maintainer has not been available to fix the issue and as such we are including them here
+# with full credit to the original developer diontimmer. Not all of their nodes are present, but just the ones we use:
+    
+class Flatten_Colors():
+    """
+    This node provides a simple interface to apply PixelSort blur to the output image.
+    """
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "images": ("IMAGE",),},
+            "optional": {
+                "number_of_colors": ("INT", {"default": 5, "min": 1, "max": 4000, "step": 1}),
+                },
+            }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "flatten"
+
+    CATEGORY = "AegisFlow/fx"
+
+    def tensor_to_pil(self, img):
+        if img is not None:
+            i = 255. * img.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        return img
+
+    def flatten(self, images, number_of_colors):
+        #create empty tensor with the same shape as images
+        total_images = []
+        for image in images:
+            image = self.tensor_to_pil(image)
+            image = image.convert('P', palette=Image.ADAPTIVE, colors=number_of_colors)
+            
+            # convert to tensor
+            out_image = np.array(image.convert("RGB")).astype(np.float32) / 255.0
+            out_image = torch.from_numpy(out_image).unsqueeze(0)
+            total_images.append(out_image)
+
+
+        total_images = torch.cat(total_images, 0)
+        return (total_images,)
+
+
+def or_convert(im, mode):
+    return im if im.mode == mode else im.convert(mode)
+
+def hue_rotate(im, deg=0):
+    cos_hue = math.cos(math.radians(deg))
+    sin_hue = math.sin(math.radians(deg))
+
+    matrix = [
+        .213 + cos_hue * .787 - sin_hue * .213,
+        .715 - cos_hue * .715 - sin_hue * .715,
+        .072 - cos_hue * .072 + sin_hue * .928,
+        0,
+        .213 - cos_hue * .213 + sin_hue * .143,
+        .715 + cos_hue * .285 + sin_hue * .140,
+        .072 - cos_hue * .072 - sin_hue * .283,
+        0,
+        .213 - cos_hue * .213 - sin_hue * .787,
+        .715 - cos_hue * .715 + sin_hue * .715,
+        .072 + cos_hue * .928 + sin_hue * .072,
+        0,
+    ]
+
+    rotated = or_convert(im, 'RGB').convert('RGB', matrix)
+    return or_convert(rotated, im.mode)
+
+
+class HueRotation():
+
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "images": ("IMAGE",),},
+            "optional": {
+                "hue_rotation": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 360.0, "step": 0.1}),
+                },
+            }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "apply_hr"
+
+    CATEGORY = "AegisFlow/fx"
+
+    def tensor_to_pil(self, img):
+        if img is not None:
+            i = 255. * img.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        return img
+
+    def apply_hr(self, images, hue_rotation):
+        #create empty tensor with the same shape as images
+        total_images = []
+        for image in images:
+            image = self.tensor_to_pil(image)
+            image = hue_rotate(image, hue_rotation)
+            # convert to tensor
+            out_image = np.array(image.convert("RGB")).astype(np.float32) / 255.0
+            out_image = torch.from_numpy(out_image).unsqueeze(0)
+            total_images.append(out_image)
+
+
+        total_images = torch.cat(total_images, 0)
+        return (total_images,)
+
+
+COLOR_MODES = {
+    'RGB': 'RGB',
+    'RGBA': 'RGBA',
+    'luminance': 'L',
+    'luminance_alpha': 'LA',
+    'cmyk': 'CMYK',
+    'ycbcr': 'YCbCr',
+    'lab': 'LAB',
+    'hsv': 'HSV',
+    'single_channel': '1',
+}
+
+class Swap_Color_Mode():
+    """
+    This node provides a simple interface to apply PixelSort blur to the output image.
+    """
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "images": ("IMAGE",),},
+            "optional": {
+                "color_mode": (['default', 'luminance', 'single_channel', 'RGB', 'RGBA', 'lab', 'hsv', 'cmyk', 'ycbcr'],),
+                },
+            }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "do_swap"
+
+    CATEGORY = "AegisFlow/fx"
+
+    def tensor_to_pil(self, img):
+        if img is not None:
+            i = 255. * img.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        return img
+
+    def do_swap(self, images, color_mode='default'):
+        total_images = []
+        for image in images:
+            image = self.tensor_to_pil(image)
+            if color_mode != 'default':
+                correct_color_mode = COLOR_MODES[color_mode]
+                image = image.convert(correct_color_mode)
+            # convert to tensor
+            out_image = np.array(image).astype(np.float32) / 255.0
+            out_image = torch.from_numpy(out_image).unsqueeze(0)
+            total_images.append(out_image)
+
+
+        total_images = torch.cat(total_images, 0)
+        return (total_images,)
+
+
+try:
+    import pilgram
+except ModuleNotFoundError:
+    # install pixelsort in current venv
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pilgram"])
+    import pilgram
+
+class ApplyFilter():
+
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "images": ("IMAGE",),},
+            "optional": {
+                "instagram_filter": ([
+                        "_1977",
+                        "aden",
+                        "brannan",
+                        "brooklyn",
+                        "clarendon",
+                        "earlybird",
+                        "gingham",
+                        "hudson",
+                        "inkwell",
+                        "kelvin",
+                        "lark",
+                        "lofi",
+                        "maven",
+                        "mayfair",
+                        "moon",
+                        "nashville",
+                        "perpetua",
+                        "reyes",
+                        "rise",
+                        "slumber",
+                        "stinson",
+                        "toaster",
+                        "valencia",
+                        "walden",
+                        "willow",
+                        "xpro2",
+                            ],),
+                },
+            }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "apply_filter"
+
+    CATEGORY = "AegisFlow/fx"
+
+    def tensor_to_pil(self, img):
+        if img is not None:
+            i = 255. * img.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        return img
+
+    def apply_filter(self, images, instagram_filter):
+        #create empty tensor with the same shape as images
+        total_images = []
+        filter_fn = getattr(pilgram, instagram_filter)
+        for image in images:
+            image = self.tensor_to_pil(image)
+            image = filter_fn(image)
+
+            # convert to tensor
+            out_image = np.array(image.convert("RGB")).astype(np.float32) / 255.0
+            out_image = torch.from_numpy(out_image).unsqueeze(0)
+            total_images.append(out_image)
+
+
+        total_images = torch.cat(total_images, 0)
+        return (total_images,)
+
+
+
+try:
+    from glitch_this import ImageGlitcher
+except ModuleNotFoundError:
+    # install pixelsort in current venv
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "glitch-this"])
+    from glitch_this import ImageGlitcher
+
+class GlitchThis():
+
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "images": ("IMAGE",),},
+            "optional": {
+                "glitch_amount": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.01}),
+                "color_offset": (['Disable', 'Enable'],),
+                "scan_lines": (['Disable', 'Enable'],),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1}),
+                },
+            }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "apply_glitch"
+
+    CATEGORY = "AegisFlow/fx"
+
+    def tensor_to_pil(self, img):
+        if img is not None:
+            i = 255. * img.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        return img
+
+    def string2bool(self, v):
+        return v == 'Enable'
+
+    def apply_glitch(self, images, glitch_amount=1, color_offset='Disable', scan_lines='Disable', seed=0):
+        color_offset = self.string2bool(color_offset)
+        scan_lines = self.string2bool(scan_lines)
+        glitcher = ImageGlitcher()
+        #create empty tensor with the same shape as images
+        total_images = []
+        for image in images:
+            image = self.tensor_to_pil(image)
+            image = glitcher.glitch_image(image, glitch_amount, color_offset=color_offset, scan_lines=scan_lines, seed=seed)
+
+            # convert to tensor
+            out_image = np.array(image.convert("RGB")).astype(np.float32) / 255.0
+            out_image = torch.from_numpy(out_image).unsqueeze(0)
+            total_images.append(out_image)
+
+
+        total_images = torch.cat(total_images, 0)
+        return (total_images,)
+    
+
+
+
+class FontText():
+    """
+    This node provides a simple interface to apply PixelSort blur to the output image.
+    """
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def INPUT_TYPES(cls):
+        """
+        Input Types
+        """
+        return {
+            "required": {
+                "images": ("IMAGE",),},
+            "optional": {
+                "font_ttf": ("STRING", {"default": 'C:/Windows/Fonts/arial.ttf'}),
+                "size": ("INT", {"default": 50, "min": 2, "max": 1000, "step": 1}),
+                "x": ("INT", {"default": 50, "min": 2, "max": 10000, "step": 1}),
+                "y": ("INT", {"default": 50, "min": 2, "max": 10000, "step": 1}),
+                "text": ("STRING", {"default": "Hello World", "multiline": True}),
+                "color": ("STRING", {"default": 'rgba(255, 255, 255, 255)'}),
+                "anchor": (["Bottom Left Corner", "Center"],),
+                "rotate": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 360.0, "step": 0.1}),
+                "color_mode": (["RGB", "RGBA"],),
+                },
+            }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "do_font"
+
+    CATEGORY = "AegisFlow/fx"
+
+    def tensor_to_pil(self, img):
+        if img is not None:
+            i = 255. * img.cpu().numpy().squeeze()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        return img
+
+    def do_font(self, images, font_ttf, size, x, y, color, anchor, rotate, color_mode, text):
+        #create empty tensor with the same shape as images
+        total_images = []
+        center_anchor = True if anchor == 'Center' else False
+        if color.startswith('#'):
+            color_rgba = tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+        else:
+            color_rgba = tuple(map(int, color.strip('rgba()').split(',')))
+        for image in images:
+            image = self.tensor_to_pil(image)
+            
+            add_text_to_image(image, font_ttf, size, x, y, text, color_rgba, center_anchor, rotate)
+
+
+
+
+
+
+            # convert to tensor
+            out_image = np.array(image.convert(color_mode)).astype(np.float32) / 255.0
+            out_image = torch.from_numpy(out_image).unsqueeze(0)
+            total_images.append(out_image)
+
+
+        total_images = torch.cat(total_images, 0)
+        return (total_images,)
+
+
+
+def add_text_to_image(img, font_ttf, size, x, y, text, color_rgb, center=False, rotate=0):
+    draw = ImageDraw.Draw(img)
+    myFont = ImageFont.truetype(font_ttf, size)
+    text_width, text_height = draw.textsize(text, font=myFont)
+
+    if center:
+        x -= text_width // 2
+        y -= text_height // 2
+
+    if rotate != 0:
+        text_img = Image.new('RGBA', img.size, (255, 255, 255, 0))
+        text_draw = ImageDraw.Draw(text_img)
+        text_draw.text((x, y), text, font=myFont, fill=color_rgb)
+        text_img = text_img.rotate(rotate, resample=Image.BICUBIC, expand=True)
+        img.paste(text_img, (0, 0), text_img)
+    else:
+        draw.text((x, y), text, font=myFont, fill=color_rgb)
+
+    return img
 
 
 
@@ -707,7 +1124,13 @@ NODE_CLASS_MAPPINGS = {
     "af_pipe_in_15": af_pipe_in_15,
     "af_pipe_out_15": af_pipe_out_15,
     "af_pipe_in_xl": af_pipe_in_xl,
-    "af_pipe_out_xl": af_pipe_out_xl    
+    "af_pipe_out_xl": af_pipe_out_xl,    
+    "Flatten Colors": Flatten_Colors,
+    "Hue Rotation": HueRotation,
+    "Swap Color Mode": Swap_Color_Mode,
+    "Apply Instagram Filter": ApplyFilter,
+    "GlitchThis Effect": GlitchThis,
+    "Add Text To Image": FontText    
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -730,8 +1153,15 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "af_pipe_in_15": "MultiPipe 1.5 In",
     "af_pipe_out_15": "MultiPipe 1.5 Out",
     "af_pipe_in_xl": "MultiPipe XL In",
-    "af_pipe_out_xl": "MultiPipe XL Out"
+    "af_pipe_out_xl": "MultiPipe XL Out",
+    "Flatten Colors": "Flatten Colors-Vextra",
+    "Hue Rotation": "Hue Rotation-Vextra",
+    "Swap Color Mode": "Swap Color Mode-Vextra",
+    "Apply Instagram Filter": "Instagram Filters-Vextra",
+    "GlitchThis Effect": "Glitch-Vextra",
+    "Add Text To Image": "Add Font Text-Vextra"    
 }
+
 
 WEB_DIRECTORY = "./js"
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
