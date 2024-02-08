@@ -1,5 +1,105 @@
 import { app } from "../../scripts/app.js";
 
+// Define a custom node that selects an image based on a property (imageIndex), maintains aspect ratio, and applies an RGBA overlay
+function aflogo() {
+    // Add a property for the image index and RGBA color overlay
+    this.addProperty("imageIndex", 0, "number", { min: 0, max: 9, title: "Image Index" });
+    this.addProperty("color", [255, 255, 255, 0.0], "array", { title: "RGBA Color Overlay" });
+    this.image = null;               // To store the loaded image
+    this.imageAspectRatio = 1;       // Default aspect ratio
+    this.loadImageByIndex(this.properties.imageIndex); // Load initial image based on index
+}
+
+// List of hardcoded image URLs
+aflogo.imageURLs = [
+    "https://www.majorstud.io/wp-content/uploads/2024/02/shimasquareonly.png", // 0 Default and "else" image
+    "https://www.majorstud.io/wp-content/uploads/2024/02/1a_15_loader.png", //1
+    "https://www.majorstud.io/wp-content/uploads/2024/02/1b_15_sampler.png",//2
+    "https://www.majorstud.io/wp-content/uploads/2024/02/2a_xl_loader.png",//3
+    "https://www.majorstud.io/wp-content/uploads/2024/02/2b_xl_sampler.png",//4
+    "https://www.majorstud.io/wp-content/uploads/2024/02/3a_Ctrlstack.png",//5
+    "https://www.majorstud.io/wp-content/uploads/2024/02/3b_ctrlinput.png",//6
+    "https://www.majorstud.io/wp-content/uploads/2024/02/3c_ctrlproc.png",//7
+    "https://www.majorstud.io/wp-content/uploads/2024/02/4a_img2img.png",//8
+    "https://www.majorstud.io/wp-content/uploads/2024/02/5a_ipmix.png",//9
+    "https://www.majorstud.io/wp-content/uploads/2024/02/6a_fxpipe.png",//10
+    "https://www.majorstud.io/wp-content/uploads/2024/02/6b_maskfx.png",//11
+    "https://www.majorstud.io/wp-content/uploads/2024/02/7a_iterate.png",//12
+    "https://www.majorstud.io/wp-content/uploads/2024/02/8a_uu.png",//13
+    "https://www.majorstud.io/wp-content/uploads/2024/02/9a_faces.png",//14
+    "https://www.majorstud.io/wp-content/uploads/2024/02/10_saver.png",//15
+    "https://www.majorstud.io/wp-content/uploads/2024/02/11_segsu.png",//16
+    "https://www.majorstud.io/wp-content/uploads/2024/02/shima-alltext.png",//17
+    "https://www.majorstud.io/wp-content/uploads/2024/02/shima-square-logo-text.png",//18
+    "https://www.majorstud.io/wp-content/uploads/2024/02/shima-wide.png",//19
+    "https://www.majorstud.io/wp-content/uploads/2024/02/shimasquareonly.png",//20 
+];
+
+// Extend LiteGraph.LGraphNode
+aflogo.prototype = Object.create(LiteGraph.LGraphNode.prototype);
+aflogo.prototype.constructor = aflogo;
+
+// Method to load the image based on the provided index
+aflogo.prototype.loadImageByIndex = function(index) {
+    // Ensure the index is within bounds
+    var url = aflogo.imageURLs[Math.max(0, Math.min(index, aflogo.imageURLs.length - 1))];
+    this.loadImage(url);
+};
+
+// Method to load the image from URL
+aflogo.prototype.loadImage = function(url) {
+    var img = new Image();
+    img.src = url;
+    img.onload = () => {
+        this.image = img;
+        this.imageAspectRatio = img.width / img.height;
+        this.setDirtyCanvas(true, true); // Redraw the node
+    };
+};
+
+// Override the onPropertyChanged method to react to property changes
+aflogo.prototype.onPropertyChanged = function(name, value) {
+    if (name == "imageIndex") {
+        this.loadImageByIndex(value);
+    }
+    return true; // Indicate the property change has been handled
+};
+
+// Override onDrawBackground to display the image with aspect ratio preservation and apply an RGBA color overlay
+aflogo.prototype.onDrawBackground = function(ctx) {
+    if (!this.image) return; // Don't draw anything if the node is collapsed or the image isn't loaded
+
+    // Aspect ratio preservation code...
+    var nodeWidth = this.size[0];
+    var nodeHeight = this.size[1];
+    var nodeAspectRatio = nodeWidth / nodeHeight;
+    var drawWidth, drawHeight;
+
+    // Calculate the size of the image to be drawn based on the node's aspect ratio
+    if (this.imageAspectRatio > nodeAspectRatio) {
+        drawWidth = nodeWidth;
+        drawHeight = drawWidth / this.imageAspectRatio;
+    } else {
+        drawHeight = nodeHeight;
+        drawWidth = drawHeight * this.imageAspectRatio;
+    }
+
+    var x = (nodeWidth - drawWidth) / 2;
+    var y = (nodeHeight - drawHeight) / 2;
+
+    ctx.drawImage(this.image, x, y, drawWidth, drawHeight);
+
+    // Apply the RGBA color overlay
+    var color = this.properties.color;
+    ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
+    ctx.fillRect(0, 0, this.size[0], this.size[1]);
+};
+
+// Register the node in LiteGraph
+LiteGraph.registerNodeType("AegisFlow/aflogo", aflogo);
+
+
+
 // taken from groupOptions.js by ComfyUI
 function addNodesToGroup(group, nodes=[]) {
     var x1, y1, x2, y2;
