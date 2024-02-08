@@ -70,6 +70,14 @@ aflogo.prototype.onPropertyChanged = function(name, value) {
     if (name == "imageIndex") {
         this.loadImageByIndex(value);
     }
+
+    if (name === "version") {
+        // Update the node's title to reflect the new version
+        this.title = "v." + value;
+    }
+    this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
+
+
     return true; // Indicate the property change has been handled
 };
 
