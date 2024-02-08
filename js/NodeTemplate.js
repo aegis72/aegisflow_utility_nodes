@@ -4,17 +4,16 @@ import { app } from "../../scripts/app.js";
 // Define a custom node that selects an image based on a property (imageIndex), maintains aspect ratio, and applies an RGBA overlay
 function aflogo() {
     // Add a property for the image index and RGBA color overlay
-    this.addProperty("imageIndex", 0, "number", { min: 0, max: 22, title: "Image Index" });
- //   this.addProperty("version", "v"+"1.0_2.8.2024_"+"0a");
+    this.addProperty("imageIndex", 0, "number", { min: 0, max: 9, title: "Image Index" });
+    this.addProperty("color", [255, 255, 255, 0.0], "array", { title: "RGBA Color Overlay" });
+    this.addProperty("version", "20240208_"+"0a", "string", { title: "version" });
     this.image = null;               // To store the loaded image
     this.imageAspectRatio = 1;       // Default aspect ratio
     this.loadImageByIndex(this.properties.imageIndex); // Load initial image based on index
-    this.addProperty("version", "20240208_"+"0a", "string", { title: "version" });
     // Set the initial title of the node to include the version
     this.title = "v." + this.properties.version;
     this.bgcolor = "rgba(31,31,31,0)";
     this.color =   "rgba(31,31,31,0)";
-    this.shadowColor = "rgba(31,31,31,0)";
 }
 
 // List of hardcoded image URLs
@@ -41,7 +40,7 @@ aflogo.imageURLs = [
     "https://www.majorstud.io/wp-content/uploads/2024/02/shima-wide.png",//19
     "https://www.majorstud.io/wp-content/uploads/2024/02/shimasquareonly.png",//20
     "https://www.majorstud.io/wp-content/uploads/2024/02/ms-badge.png",//21
-    "https://www.majorstud.io/wp-content/uploads/2024/02/ms-logo-wide.png",//22   
+    "https://www.majorstud.io/wp-content/uploads/2024/02/ms-logo-wide.png",//22  
 ];
 
 // Extend LiteGraph.LGraphNode
@@ -74,18 +73,9 @@ aflogo.prototype.onPropertyChanged = function(name, value) {
     return true; // Indicate the property change has been handled
 };
 
-aflogo.prototype.onPropertyChanged = function(name, value) {
-
-if (name === "version") {
-    // Update the node's title to reflect the new version
-    this.title = "v." + value;
-    this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
-}
-};
-
 // Override onDrawBackground to display the image with aspect ratio preservation and apply an RGBA color overlay
 aflogo.prototype.onDrawBackground = function(ctx) {
-    if (!this.image) return; // Don't draw anything if the image isn't loaded
+    if (!this.image) return; // Don't draw anything if the node is collapsed or the image isn't loaded
 
     // Aspect ratio preservation code...
     var nodeWidth = this.size[0];
@@ -106,11 +96,17 @@ aflogo.prototype.onDrawBackground = function(ctx) {
     var y = (nodeHeight - drawHeight) / 2;
 
     ctx.drawImage(this.image, x, y, drawWidth, drawHeight);
+
+    // Apply the RGBA color overlay
+    var color = this.properties.color;
+    ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
+    ctx.fillRect(0, 0, this.size[0], this.size[1]);
+
 };
+
 
 // Register the node in LiteGraph
 LiteGraph.registerNodeType("AegisFlow/aflogo", aflogo);
-
 
 
 // taken from groupOptions.js by ComfyUI
