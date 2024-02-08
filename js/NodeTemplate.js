@@ -32,7 +32,9 @@ aflogo.imageURLs = [
     "https://www.majorstud.io/wp-content/uploads/2024/02/shima-alltext.png",//17
     "https://www.majorstud.io/wp-content/uploads/2024/02/shima-square-logo-text.png",//18
     "https://www.majorstud.io/wp-content/uploads/2024/02/shima-wide.png",//19
-    "https://www.majorstud.io/wp-content/uploads/2024/02/shimasquareonly.png",//20 
+    "https://www.majorstud.io/wp-content/uploads/2024/02/shimasquareonly.png",//20
+    "https://www.majorstud.io/wp-content/uploads/2024/02/ms-badge.png",//21
+    "https://www.majorstud.io/wp-content/uploads/2024/02/ms-logo-wide.png",//22  
 ];
 
 // Extend LiteGraph.LGraphNode
