@@ -582,10 +582,10 @@ class af_pipe_in_15:
                 "clip": ("CLIP",),
                 "positive": ("CONDITIONING",),
                 "negative": ("CONDITIONING",),
-                "imagewidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-                "imageheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latentwidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latentheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "imagewidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "imageheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "latentwidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "latentheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
             },
         }
 
@@ -594,9 +594,9 @@ class af_pipe_in_15:
     FUNCTION = "af_pipe_in"
     CATEGORY = "AegisFlow/passers"
 
-    def af_pipe_in(self, image=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0, image_width=0, image_height=0, latent_width=0, latent_height=0):
+    def af_pipe_in(self, image=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0,): #image_width=0, image_height=0, latent_width=0, latent_height=0
         discord = "https://discord.gg/fVQB2XAKTM"
-        pipe_line = (image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height)
+        pipe_line = (image, mask, latent, model, vae, clip, positive, negative,) #"""image_width, image_height, latent_width, latent_height"""
 
         return (pipe_line, discord, )
     
@@ -608,16 +608,16 @@ class af_pipe_out_15:
             "required": {"pipe": ("PIPE_LINE",)},
         }
 
-    RETURN_TYPES = ("PIPE_LINE", "IMAGE", "MASK", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING", )
-    RETURN_NAMES = ("pipe", "image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "image_width", "image_height", "latent_width", "latent_height", "discord link", )
+    RETURN_TYPES = ("PIPE_LINE", "IMAGE", "MASK", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", """"INT", "INT", "INT", "INT",""" "STRING", )
+    RETURN_NAMES = ("pipe", "image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "discord link", )  #""""image_width", "image_height", "latent_width", "latent_height","""
     FUNCTION = "af_pipe_out"
     CATEGORY = "AegisFlow/passers"
 
     def af_pipe_out(self, pipe):
         discord = "https://discord.gg/fVQB2XAKTM"
-        image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height = pipe
+        image, mask, latent, model, vae, clip, positive, negative, = pipe #image_width, image_height, latent_width, latent_height 
 
-        return (pipe, image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height, discord, )
+        return (pipe, image, mask, latent, model, vae, clip, positive, negative, discord,) #"""image_width, image_height, latent_width, latent_height,"""
     
 class af_pipe_in_xl:
 
@@ -644,10 +644,9 @@ class af_pipe_in_xl:
                 "refiner_clip": ("CLIP",),
                 "refiner_positive": ("CONDITIONING",),
                 "refiner_negative": ("CONDITIONING",),                
-                "imagewidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-                "imageheight": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latentwidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-                "latentheight": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "imagewidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "imageheight": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+#                "latentwidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
             },
         }
 
@@ -656,9 +655,9 @@ class af_pipe_in_xl:
     FUNCTION = "af_pipe_in_xl"
     CATEGORY = "AegisFlow/passers"
 
-    def af_pipe_in_xl(self, image=0, sdxl_tuple=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0, refiner_model=0, refiner_vae=0, refiner_clip=0, refiner_positive=0, refiner_negative=0, image_width=0, image_height=0, latent_width=0, latent_height=0):
+    def af_pipe_in_xl(self, image=0, sdxl_tuple=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0, refiner_model=0, refiner_vae=0, refiner_clip=0, refiner_positive=0, refiner_negative=0, ): #image_width=0, image_height=0, latent_width=0, latent_height=0
         discord = "https://discord.gg/fVQB2XAKTM"
-        pipe_line = (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height)
+        pipe_line = (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative,) #"""image_width, image_height, latent_width, latent_height"""
 
         return (pipe_line, discord, )
     
@@ -673,16 +672,16 @@ class af_pipe_out_xl:
             "required": {"pipe": ("PIPE_LINE",)},
         }
 
-    RETURN_TYPES = ("IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING", )
-    RETURN_NAMES = ("image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative", "image_width", "image_height", "latent_width", "latent_height", "discord link", )
+    RETURN_TYPES = ("IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING",  "STRING", ) #""""INT", "INT", "INT", "INT","""
+    RETURN_NAMES = ("image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative",  "discord link",) #""""DNU image_width", "DNU image_height", "DNU latent_width", "DNU latent_height","""
     FUNCTION = "af_pipe_out_xl"
     CATEGORY = "AegisFlow/passers"
 
     def af_pipe_out_xl(self, pipe):
         discord = "https://discord.gg/fVQB2XAKTM"
-        image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height = pipe
+        image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative = pipe #"""image_width, image_height, latent_width, latent_height""" 
 
-        return (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, refiner_negative, latent_width, latent_height, discord, )
+        return (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, discord, )  #"""image_width, image_height, latent_width, latent_height,""" 
 
 # Vextra Nodes; These are having issues being imported due to some errors occurring on the original nodes; maintainer has not been available to fix the issue and as such we are including them here
 # with full credit to the original developer diontimmer. Not all of their nodes are present, but just the ones we use:
