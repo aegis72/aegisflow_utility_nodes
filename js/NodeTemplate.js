@@ -1,11 +1,12 @@
 import { app } from "../../scripts/app.js";
 
+// Define a custom node that selects an image based on a property (imageIndex), maintains aspect ratio
+function aflogo(){
 
-// Define a custom node that selects an image based on a property (imageIndex), maintains aspect ratio, and applies an RGBA overlay
-function aflogo() {
-    // Add a property for the image index and RGBA color overlay
-    this.addProperty("imageIndex", 0, "number", { min: 0, max: 9, title: "Image Index" });
-    this.addProperty("color", [255, 255, 255, 0.0], "array", { title: "RGBA Color Overlay" });
+    this.isVirtualNode = true;
+
+// Add a property for the image index and RGBA color overlay
+    this.addProperty("imageIndex", 0, "number", { min: 0, max: 23, title: "Image Index" });
     this.addProperty("version", "20240208_"+"0a", "string", { title: "version" });
     this.image = null;               // To store the loaded image
     this.imageAspectRatio = 1;       // Default aspect ratio
@@ -14,7 +15,13 @@ function aflogo() {
     this.title = "v." + this.properties.version;
     this.bgcolor = "rgba(31,31,31,0)";
     this.color =   "rgba(31,31,31,0)";
+    this.title = "v."
+
+    // Optional: Add a dummy input and output to satisfy application requirements
+//    this.addInput("input", null);  // The type can be adjusted based on your needs
+//    this.addOutput("output", null); // The type can be adjusted based on your needs
 }
+
 
 // List of hardcoded image URLs
 aflogo.imageURLs = [
@@ -69,17 +76,18 @@ aflogo.prototype.loadImage = function(url) {
 aflogo.prototype.onPropertyChanged = function(name, value) {
     if (name == "imageIndex") {
         this.loadImageByIndex(value);
+        this.setDirtyCanvas(true, true); // Redraw the node
     }
 
     if (name === "version") {
         // Update the node's title to reflect the new version
         this.title = "v." + value;
+        this.setDirtyCanvas(true, true); // Redraw the node
     }
-    this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
-
-
+//  this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
     return true; // Indicate the property change has been handled
 };
+
 
 // Override onDrawBackground to display the image with aspect ratio preservation and apply an RGBA color overlay
 aflogo.prototype.onDrawBackground = function(ctx) {
@@ -104,14 +112,7 @@ aflogo.prototype.onDrawBackground = function(ctx) {
     var y = (nodeHeight - drawHeight) / 2;
 
     ctx.drawImage(this.image, x, y, drawWidth, drawHeight);
-
-    // Apply the RGBA color overlay
-    var color = this.properties.color;
-    ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
-    ctx.fillRect(0, 0, this.size[0], this.size[1]);
-
 };
-
 
 // Register the node in LiteGraph
 LiteGraph.registerNodeType("AegisFlow/aflogo", aflogo);
