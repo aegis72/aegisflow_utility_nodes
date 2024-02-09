@@ -119,7 +119,7 @@ LiteGraph.registerNodeType("AegisFlow/aflogo", aflogo);
 
 
 // taken from groupOptions.js by ComfyUI
-function addNodesToGroup(group, nodes=[]) {
+export function addNodesToGroup(group, nodes=[]) {
     var x1, y1, x2, y2;
     var nx1, ny1, nx2, ny2;
     var node;
