@@ -84,7 +84,7 @@ aflogo.prototype.onPropertyChanged = function(name, value) {
         this.title = "v." + value;
         this.setDirtyCanvas(true, true); // Redraw the node
     }
-//  this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
+  this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
     return true; // Indicate the property change has been handled
 };
 
