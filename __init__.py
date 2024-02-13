@@ -118,7 +118,19 @@ class aegisflow_model_pass:
     CATEGORY = "AegisFlow/passers"
 
     def model_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
+        # Check if "model" key exists in kwargs and it is not None, otherwise return an empty MODEL placeholder
+        if "model" in kwargs and kwargs["model"] is not None:
+            return [kwargs["model"]]
+        else:
+            # Assuming 'empty_model_placeholder' represents a valid empty MODEL type structure
+            empty_model_placeholder = self.create_empty_model_placeholder()
+            return [empty_model_placeholder]
+
+    def create_empty_model_placeholder(self):
+        # Implement this method based on what constitutes a valid empty MODEL type in your system
+        # This might involve returning an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
 
 # model PassThrough (Aegis72)
 # this node takes a model as an input and passes it through. It is used for remote
@@ -145,7 +157,19 @@ class aegisflow_clip_pass:
     CATEGORY = "AegisFlow/passers"
 
     def clip_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
+        # Check if "clip" key exists in kwargs and it is not None, otherwise return an empty CLIP placeholder
+        if "clip" in kwargs and kwargs["clip"] is not None:
+            return [kwargs["clip"]]
+        else:
+            # Assuming 'empty_clip_placeholder' represents a valid empty CLIP type structure
+            empty_clip_placeholder = self.create_empty_clip_placeholder()
+            return [empty_clip_placeholder]
+
+    def create_empty_clip_placeholder(self):
+        # Implement this method based on what constitutes a valid empty CLIP type in your system
+        # For example, this might return an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
 
 
 # vae PassThrough (Aegis72)
@@ -173,8 +197,23 @@ class aegisflow_vae_pass:
     CATEGORY = "AegisFlow/passers"
 
     def vae_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
+        # Check if "vae" key exists in kwargs and it is not None, otherwise return an empty VAE placeholder
+        if "vae" in kwargs and kwargs["vae"] is not None:
+            return [kwargs["vae"]]
+        else:
+            # Assuming 'empty_vae_placeholder' represents a valid empty VAE type structure
+            empty_vae_placeholder = self.create_empty_vae_placeholder()
+            return [empty_vae_placeholder]
 
+    def create_empty_vae_placeholder(self):
+        # Implement this method based on what constitutes a valid empty VAE type in your system
+        # For example, this might return an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
+
+# Image PassThrough (Aegis72)
+# this node takes an image  as an input and passes it through. It is used for remote
+# targeting with an "Anything Everywhere" node sender
 
 class aegisflow_image_pass:
 
@@ -198,7 +237,18 @@ class aegisflow_image_pass:
     CATEGORY = "AegisFlow/passers"
 
     def image_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None]  
+        # Check if "image" key exists in kwargs and it is not None, otherwise return an empty IMAGE placeholder
+        if "image" in kwargs and kwargs["image"] is not None:
+            return [kwargs["image"]]
+        else:
+            # Assuming 'empty_image_placeholder' represents a valid empty IMAGE type structure
+            empty_image_placeholder = self.create_empty_image_placeholder()
+            return [empty_image_placeholder]
+
+    def create_empty_image_placeholder(self):
+        # Implement this method based on what constitutes a valid empty IMAGE type in your system
+        # For example, this might return an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
 
 
 # LATENT PassThrough (Aegis72)
@@ -225,7 +275,19 @@ class aegisflow_latent_pass:
     CATEGORY = "AegisFlow/passers"
 
     def latent_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None]  
+        # Check if "latent" key exists in kwargs and it is not None, otherwise return an empty LATENT placeholder
+        if "latent" in kwargs and kwargs["latent"] is not None:
+            return [kwargs["latent"]]
+        else:
+            # Assuming 'empty_latent_placeholder' represents a valid empty LATENT type structure
+            empty_latent_placeholder = self.create_empty_latent_placeholder()
+            return [empty_latent_placeholder]
+
+    def create_empty_latent_placeholder(self):
+        # Implement this method based on what constitutes a valid empty LATENT type in your system
+        # For example, this might return an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
 
 # MASK PassThrough (Aegis72)
 # this node takes a mask as an input and passes it through. It is used for remote
@@ -252,7 +314,19 @@ class aegisflow_mask_pass:
     CATEGORY = "AegisFlow/passers"
 
     def mask_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
+        # Check if "mask" key exists in kwargs and it is not None, otherwise return an empty MASK placeholder
+        if "mask" in kwargs and kwargs["mask"] is not None:
+            return [kwargs["mask"]]
+        else:
+            # Assuming 'empty_mask_placeholder' represents a valid empty MASK type structure
+            empty_mask_placeholder = self.create_empty_mask_placeholder()
+            return [empty_mask_placeholder]
+
+    def create_empty_mask_placeholder(self):
+        # Implement this method based on what constitutes a valid empty MASK type in your system
+        # This might involve returning an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
 
 # PosNeg PassThrough (Aegis72)
 # this node takes CLIP as an input and passes it through. It is used for remote
@@ -280,7 +354,17 @@ class aegisflow_posneg_pass:
     CATEGORY = "AegisFlow/passers"
 
     def posneg_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
+        # Initialize placeholders for positive and negative to handle cases where they are not provided
+        positive_placeholder = self.create_empty_conditioning_placeholder() if "positive" not in kwargs or kwargs["positive"] is None else kwargs["positive"]
+        negative_placeholder = self.create_empty_conditioning_placeholder() if "negative" not in kwargs or kwargs["negative"] is None else kwargs["negative"]
+        
+        return [positive_placeholder, negative_placeholder]
+
+    def create_empty_conditioning_placeholder(self):
+        # Implement this method based on what constitutes a valid empty CONDITIONING type in your system
+        # This might involve returning an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
 
 # Conditioning PassThrough (Aegis72)
 # this node takes CONDITIONING as an input and passes it through. It is used for remote
@@ -307,7 +391,19 @@ class aegisflow_cond_pass:
     CATEGORY = "AegisFlow/passers"
 
     def conditioning_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None] 
+        # Check if "conditioning" key exists in kwargs and it is not None, otherwise return an empty CONDITIONING placeholder
+        if "conditioning" in kwargs and kwargs["conditioning"] is not None:
+            return [kwargs["conditioning"]]
+        else:
+            # Assuming 'empty_conditioning_placeholder' represents a valid empty CONDITIONING type structure
+            empty_conditioning_placeholder = self.create_empty_conditioning_placeholder()
+            return [empty_conditioning_placeholder]
+
+    def create_empty_conditioning_placeholder(self):
+        # Implement this method based on what constitutes a valid empty CONDITIONING type in your system
+        # This might involve returning an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
     
 # SDXL Tuple PassThrough (Aegis72)
 # this node takes CONDITIONING as an input and passes it through. It is used for remote
@@ -334,7 +430,19 @@ class aegisflow_sdxltuple_pass:
     CATEGORY = "AegisFlow/passers"
 
     def tuple_passer(self, **kwargs):
-        return [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        # Check if "sdxl tuple" key exists in kwargs and it is not None, otherwise return an empty SDXL_TUPLE placeholder
+        if "sdxl tuple" in kwargs and kwargs["sdxl tuple"] is not None:
+            return [kwargs["sdxl tuple"]]
+        else:
+            # Assuming 'empty_sdxl_tuple_placeholder' represents a valid empty SDXL_TUPLE type structure
+            empty_sdxl_tuple_placeholder = self.create_empty_sdxl_tuple_placeholder()
+            return [empty_sdxl_tuple_placeholder]
+
+    def create_empty_sdxl_tuple_placeholder(self):
+        # Implement this method based on what constitutes a valid empty SDXL_TUPLE type in your system
+        # This might involve returning an empty list, a specific object, or another suitable placeholder
+        return None  # Adjust this return value based on your system's requirements
+
 
 
 # ---------------------------------------------------------------------------------------------------------------------#
