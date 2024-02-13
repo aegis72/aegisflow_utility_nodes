@@ -55,7 +55,36 @@ class aegisflow_multi_passxl:
 
     def af_passnodesxl(self, **kwargs):
         output_order = ("image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "refiner model", "refiner clip", "refiner positive", "refiner negative", "sdxl tuple",)
-        return [kwargs.setdefault(key, '0') for key in output_order]
+        outputs = []
+        for key in output_order:
+            if key in kwargs and kwargs[key] is not None:
+                outputs.append(kwargs[key])
+            else:
+                # Call a specific method to create an empty placeholder for each type
+                empty_placeholder = self.create_empty_placeholder_for_type(key)
+                outputs.append(empty_placeholder)
+        return outputs
+
+    def create_empty_placeholder_for_type(self, type_key):
+        # This method should return a valid empty placeholder for the given type
+        # Placeholder implementation; adjust based on your system's requirements for each type
+        placeholder_map = {
+            "image": None,  # Adjust to valid empty IMAGE placeholder
+            "mask": None,   # Adjust to valid empty MASK placeholder
+            "latent": None,  # Adjust to valid empty LATENT placeholder
+            "model": None,  # Adjust to valid empty MODEL placeholder
+            "vae": None,    # Adjust to valid empty VAE placeholder
+            "clip": None,   # Adjust to valid empty CLIP placeholder
+            "positive": None,  # Adjust to valid empty CONDITIONING placeholder
+            "negative": None,  # Adjust to valid empty CONDITIONING placeholder
+            "refiner model": None,  # Adjust to valid empty MODEL placeholder
+            "refiner clip": None,  # Adjust to valid empty CLIP placeholder
+            "refiner positive": None,  # Adjust to valid empty CONDITIONING placeholder
+            "refiner negative": None,  # Adjust to valid empty CONDITIONING placeholder
+            "sdxl tuple": None,  # Adjust to valid empty SDXL_TUPLE placeholder
+        }
+        return placeholder_map.get(type_key, None)
+
     
 
 #Passer for SD 1.5
@@ -79,7 +108,6 @@ class aegisflow_multi_pass:
                 "positive": ("CONDITIONING",),
                 "negative": ("CONDITIONING",),
                 "sdxl tuple": ("SDXL_TUPLE",),
-
             },
         }
 
@@ -90,7 +118,32 @@ class aegisflow_multi_pass:
 
     def af_passnodes(self, **kwargs):
         output_order = ("image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "sdxl tuple",)
-        return [kwargs.setdefault(key, '0') for key in output_order]
+        outputs = []
+        for key in output_order:
+            if key in kwargs and kwargs[key] is not None:
+                outputs.append(kwargs[key])
+            else:
+                # Call a specific method to create an empty placeholder for each type
+                empty_placeholder = self.create_empty_placeholder_for_type(key)
+                outputs.append(empty_placeholder)
+        return outputs
+
+    def create_empty_placeholder_for_type(self, type_key):
+        # This method should return a valid empty placeholder for the given type
+        # Placeholder implementation; adjust based on your system's requirements for each type
+        placeholder_map = {
+            "image": None,  # Adjust to valid empty IMAGE placeholder
+            "mask": None,   # Adjust to valid empty MASK placeholder
+            "latent": None,  # Adjust to valid empty LATENT placeholder
+            "model": None,  # Adjust to valid empty MODEL placeholder
+            "vae": None,    # Adjust to valid empty VAE placeholder
+            "clip": None,   # Adjust to valid empty CLIP placeholder
+            "positive": None,  # Adjust to valid empty CONDITIONING placeholder
+            "negative": None,  # Adjust to valid empty CONDITIONING placeholder
+            "sdxl tuple": None,  # Adjust to valid empty SDXL_TUPLE placeholder
+        }
+        return placeholder_map[type_key]
+
 
 
 # model PassThrough (Aegis72)
@@ -690,10 +743,10 @@ class af_pipe_in_15:
                 "clip": ("CLIP",),
                 "positive": ("CONDITIONING",),
                 "negative": ("CONDITIONING",),
-#                "imagewidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-#                "imageheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-#                "latentwidth": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-#                "latentheight": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "image_width": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "image_height": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latent_width": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latent_height": ("INT", {"default": 512, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
             },
         }
 
@@ -702,10 +755,9 @@ class af_pipe_in_15:
     FUNCTION = "af_pipe_in"
     CATEGORY = "AegisFlow/passers"
 
-    def af_pipe_in(self, image=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0,): #image_width=0, image_height=0, latent_width=0, latent_height=0
+    def af_pipe_in(self, image=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0,image_width=0, image_height=0, latent_width=0, latent_height=0):
+        pipe_line = (image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height)
         discord = "https://discord.gg/fVQB2XAKTM"
-        pipe_line = (image, mask, latent, model, vae, clip, positive, negative,) #"""image_width, image_height, latent_width, latent_height"""
-
         return (pipe_line, discord, )
     
 class af_pipe_out_15:
@@ -716,16 +768,16 @@ class af_pipe_out_15:
             "required": {"pipe": ("PIPE_LINE",)},
         }
 
-    RETURN_TYPES = ("PIPE_LINE", "IMAGE", "MASK", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", """"INT", "INT", "INT", "INT",""" "STRING", )
-    RETURN_NAMES = ("pipe", "image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "discord link", )  #""""image_width", "image_height", "latent_width", "latent_height","""
+    RETURN_TYPES = ("PIPE_LINE", "IMAGE", "MASK", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING",)
+    RETURN_NAMES = ("pipe", "image", "mask", "latent", "model", "vae", "clip", "positive", "negative", "image_width", "image_height", "latent_width", "latent_height", "discord link",)  
     FUNCTION = "af_pipe_out"
     CATEGORY = "AegisFlow/passers"
 
     def af_pipe_out(self, pipe):
         discord = "https://discord.gg/fVQB2XAKTM"
-        image, mask, latent, model, vae, clip, positive, negative, = pipe #image_width, image_height, latent_width, latent_height 
+        image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height  = pipe 
 
-        return (pipe, image, mask, latent, model, vae, clip, positive, negative, discord,) #"""image_width, image_height, latent_width, latent_height,"""
+        return (pipe, image, mask, latent, model, vae, clip, positive, negative, image_width, image_height, latent_width, latent_height, discord,)
     
 class af_pipe_in_xl:
 
@@ -752,9 +804,10 @@ class af_pipe_in_xl:
                 "refiner_clip": ("CLIP",),
                 "refiner_positive": ("CONDITIONING",),
                 "refiner_negative": ("CONDITIONING",),                
-#                "imagewidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-#                "imageheight": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
-#                "latentwidth": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "image_width": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "image_height": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latent_width": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
+                "latent_height": ("INT", {"default": 1024, "min": 64, "max": 0xffffffffffffffff, "forceInput": True}),
             },
         }
 
@@ -763,10 +816,9 @@ class af_pipe_in_xl:
     FUNCTION = "af_pipe_in_xl"
     CATEGORY = "AegisFlow/passers"
 
-    def af_pipe_in_xl(self, image=0, sdxl_tuple=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0, refiner_model=0, refiner_vae=0, refiner_clip=0, refiner_positive=0, refiner_negative=0, ): #image_width=0, image_height=0, latent_width=0, latent_height=0
+    def af_pipe_in_xl(self, image=0, sdxl_tuple=0, mask=0, latent=0, model=0, vae=0, clip=0, positive=0, negative=0, refiner_model=0, refiner_vae=0, refiner_clip=0, refiner_positive=0, refiner_negative=0, image_width=0, image_height=0, latent_width=0, latent_height=0 ): #image_width=0, image_height=0, latent_width=0, latent_height=0
+        pipe_line = (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, latent_width, latent_height)
         discord = "https://discord.gg/fVQB2XAKTM"
-        pipe_line = (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative,) #"""image_width, image_height, latent_width, latent_height"""
-
         return (pipe_line, discord, )
     
 class af_pipe_out_xl:
@@ -780,23 +832,22 @@ class af_pipe_out_xl:
             "required": {"pipe": ("PIPE_LINE",)},
         }
 
-    RETURN_TYPES = ("IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING",  "STRING", ) #""""INT", "INT", "INT", "INT","""
-    RETURN_NAMES = ("image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative",  "discord link",) #""""DNU image_width", "DNU image_height", "DNU latent_width", "DNU latent_height","""
+    RETURN_TYPES = ("IMAGE", "MASK", "SDXL_TUPLE", "LATENT", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "MODEL", "VAE", "CLIP", "CONDITIONING", "CONDITIONING", "INT", "INT", "INT", "INT", "STRING",) 
+    RETURN_NAMES = ("image", "mask", "sdxl_tuple", "latent", "model", "vae", "clip", "positive", "negative", "refiner_model", "refiner_vae", "refiner_clip", "refiner_positive", "refiner_negative", "image_width", "image_height", "latent_width", "latent_height", "discord link",) 
     FUNCTION = "af_pipe_out_xl"
     CATEGORY = "AegisFlow/passers"
 
     def af_pipe_out_xl(self, pipe):
+        image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, latent_width, latent_height = pipe  
         discord = "https://discord.gg/fVQB2XAKTM"
-        image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative = pipe #"""image_width, image_height, latent_width, latent_height""" 
-
-        return (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, discord, )  #"""image_width, image_height, latent_width, latent_height,""" 
+        return (image, mask, sdxl_tuple, latent, model, vae, clip, positive, negative, refiner_model, refiner_vae, refiner_clip, refiner_positive, refiner_negative, image_width, image_height, latent_width, latent_height, discord, ) 
 
 # Vextra Nodes; These are having issues being imported due to some errors occurring on the original nodes; maintainer has not been available to fix the issue and as such we are including them here
-# with full credit to the original developer diontimmer. Not all of their nodes are present, but just the ones we use:
+# with full credit to the original developer diontimmer. Not all of their nodes are present, but just the ones we use. The "Add text to image has been extended to handle multiple OS default fonts."
     
 class Flatten_Colors():
     """
-    This node provides a simple interface to apply PixelSort blur to the output image.
+    This node provides a simple interface to flatten colors in the output image.
     """
     def __init__(self):
         pass
@@ -927,7 +978,7 @@ COLOR_MODES = {
 
 class Swap_Color_Mode():
     """
-    This node provides a simple interface to apply PixelSort blur to the output image.
+    This node provides a simple interface to swap color modes of the output image.
     """
     def __init__(self):
         pass
@@ -1168,9 +1219,6 @@ class FontText():
     FUNCTION = "do_font"
 
     CATEGORY = "AegisFlow/fx"
-
-    # The rest of the methods remain unchanged
-
 
     def tensor_to_pil(self, img):
         if img is not None:
