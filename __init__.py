@@ -290,18 +290,32 @@ class aegisflow_image_pass:
     CATEGORY = "AegisFlow/passers"
 
     def image_passer(self, **kwargs):
-        # Check if "image" key exists in kwargs and it is not None, otherwise return an empty IMAGE placeholder
+        # Initialize placeholders for image and mask
+        image_result = None
+        mask_result = None
+
+        # Check if "image" key exists in kwargs and it is not None, otherwise use an empty IMAGE placeholder
         if "image" in kwargs and kwargs["image"] is not None:
-            return [kwargs["image"]]
+            image_result = kwargs["image"]
         else:
-            # Assuming 'empty_image_placeholder' represents a valid empty IMAGE type structure
-            empty_image_placeholder = self.create_empty_image_placeholder()
-            return [empty_image_placeholder]
+            # Assuming 'create_empty_image_placeholder' returns a valid empty IMAGE type structure
+            image_result = self.create_empty_image_placeholder()
+
+        # Check if "mask" key exists in kwargs and it is not None, otherwise use None as the mask result
+        if "mask" in kwargs and kwargs["mask"] is not None:
+            mask_result = kwargs["mask"]
+        else:
+            # Here we assume that if no mask is provided, we return None or an equivalent placeholder if necessary
+            mask_result = None  # Adjust based on how you want to handle an absent mask
+
+        # Return both image and mask results
+        return [image_result, mask_result]
 
     def create_empty_image_placeholder(self):
         # Implement this method based on what constitutes a valid empty IMAGE type in your system
         # For example, this might return an empty list, a specific object, or another suitable placeholder
         return None  # Adjust this return value based on your system's requirements
+
 
 
 # LATENT PassThrough (Aegis72)
