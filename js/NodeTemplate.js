@@ -7,15 +7,15 @@ function aflogo(){
 
 // Add a property for the image index and RGBA color overlay
     this.addProperty("imageIndex", 0, "number", { min: 0, max: 23, title: "Image Index" });
-    this.addProperty("version", "20240208_"+"0a", "string", { title: "version" });
+    this.addProperty("version", "20240223", "string", { title: "version" });
     this.image = null;               // To store the loaded image
     this.imageAspectRatio = 1;       // Default aspect ratio
     this.loadImageByIndex(this.properties.imageIndex); // Load initial image based on index
     // Set the initial title of the node to include the version
-    this.title = "v." + this.properties.version;
+    this.title = "\u00A0" + this.properties.version;
     this.bgcolor = "rgba(31,31,31,0)";
     this.color =   "rgba(31,31,31,0)";
-    this.title = "v."
+    this.title = "\u00A0"
 
     // Optional: Add a dummy input and output to satisfy application requirements
 //    this.addInput("input", null);  // The type can be adjusted based on your needs
