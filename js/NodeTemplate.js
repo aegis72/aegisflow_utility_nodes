@@ -22,6 +22,9 @@ function aflogo(){
 //    this.addOutput("output", null); // The type can be adjusted based on your needs
 }
 
+function randomString(length) {
+    return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+}
 
 // List of hardcoded image URLs
 aflogo.imageURLs = [
@@ -223,7 +226,7 @@ app.registerExtension({
                                     if (Object.keys(app.canvas.selected_nodes || {}).length) {
                                         clearInterval(intervalId);
                                         var group = new LiteGraph.LGraphGroup();
-                                        group.title = option.content;
+                                        group.title = option.content + "_" + randomString(3);
                                         group.color = "#454545";
                                         addNodesToGroup(group, app.canvas.selected_nodes)
                                         app.canvas.graph.add(group);
