@@ -6,8 +6,8 @@ function aflogo(){
     this.isVirtualNode = true;
 
 // Add a property for the image index and RGBA color overlay
-    this.addProperty("imageIndex", 0, "number", { min: 0, max: 23, title: "Image Index" });
-    this.addProperty("version", "20240224", "string", { title: "version" });
+    this.addProperty("imageIndex", 0, "number", { min: 0, max: 24, title: "Image Index" });
+    this.addProperty("version", "20240302", "string", { title: "version" });
     this.image = null;               // To store the loaded image
     this.imageAspectRatio = 1;       // Default aspect ratio
     this.loadImageByIndex(this.properties.imageIndex); // Load initial image based on index
@@ -52,7 +52,8 @@ aflogo.imageURLs = [
     "https://www.majorstud.io/wp-content/uploads/2024/02/ms-badge.png",//21
     "https://www.majorstud.io/wp-content/uploads/2024/02/ms-logo-wide.png",//22
     "https://www.majorstud.io/wp-content/uploads/2024/02/comparator.png",//23
-    "https://www.majorstud.io/wp-content/uploads/2024/02/supersaver.png",//24    
+    "https://www.majorstud.io/wp-content/uploads/2024/02/supersaver.png",//24
+    "https://www.majorstud.io/wp-content/uploads/2024/03/ctrl-paint.png",//25    
 ];
 
 // Extend LiteGraph.LGraphNode
