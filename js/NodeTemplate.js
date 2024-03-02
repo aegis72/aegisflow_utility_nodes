@@ -6,7 +6,7 @@ function aflogo(){
     this.isVirtualNode = true;
 
 // Add a property for the image index and RGBA color overlay
-    this.addProperty("imageIndex", 0, "number", { min: 0, max: 24, title: "Image Index" });
+    this.addProperty("imageIndex", 0, "number", { min: 0, max: 25, title: "Image Index" });
     this.addProperty("version", "20240302", "string", { title: "version" });
     this.image = null;               // To store the loaded image
     this.imageAspectRatio = 1;       // Default aspect ratio
