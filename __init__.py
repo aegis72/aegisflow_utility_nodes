@@ -1284,7 +1284,34 @@ def add_text_to_image(img, font_ttf, size, x, y, text, color_rgb, center=False, 
 
     return img
 
+#This is an input switch for two INTs.  
+class binaryInt_switch:
+    def __init__(self):
+        pass
 
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "Input": ("INT", {"default": 1, "min": 1, "max": 2}),
+            },
+            "optional": {
+                "int1": ("INT", {"forceInput": True}),
+                "int2": ("INT", {"forceInput": True}), 
+            }
+        }
+
+    RETURN_TYPES = ("INT", "STRING", )
+    RETURN_NAMES = ("choice", "discord", )
+    FUNCTION = "switch"
+    CATEGORY = "AegisFlow/utils"
+
+    def switch(self, Input, int1=None, int2=None,):
+        discord_address = "https://discord.com/invite/74cP9rarNs"
+        if Input == 1:
+            return (int1, discord_address, )
+        else:
+            return (int2, discord_address, )
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
@@ -1314,7 +1341,8 @@ NODE_CLASS_MAPPINGS = {
     "Swap Color Mode": Swap_Color_Mode,
     "Apply Instagram Filter": ApplyFilter,
     "GlitchThis Effect": GlitchThis,
-    "Add Text To Image": FontText    
+    "Add Text To Image": FontText,
+    "Binary INT Switch": binaryInt_switch    
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -1343,7 +1371,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Swap Color Mode": "Swap Color Mode-Vextra",
     "Apply Instagram Filter": "Instagram Filters-Vextra",
     "GlitchThis Effect": "Glitch-Vextra",
-    "Add Text To Image": "Add Font Text-Vextra"    
+    "Add Text To Image": "Add Font Text-Vextra",
+    "Binary INT Switch": "Int Switch"  
 }
 
 
