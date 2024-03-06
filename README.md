@@ -41,8 +41,9 @@ Note: Zero consideration was made for the eye-destroying light theme. Only the D
 
 ## Where do you get all these wonderful toys?
 
-The Utility Nodes are a free community resource, as is the classic version of AegisFlow. I'll also be releasing the "Simple 1.5 Workflow" for AegisFlow Shima for folks to test.
+The Utility Nodes are a free community resource, as is the classic version of AegisFlow (although I am no longer updating the AegisFlow WF) 
 
-That said, my kids like to be able to eat, and you can support me through a Major Studio membership or a one-time $15 payment at [majorstudio.gumroad.com](https://majorsyudio.gumroad.com) that will get you the entire death star and future updates, new modules, and enhancements like our upcoming installer and updater application (not out just yet; it is WIP). Until this bright near-future, I have a windows-based installer and a pretty easy DIY install process:
+That said, my kids like to be able to eat, and you can support me through a Major Studio membership or a one-time $15 payment at [majorstudio.gumroad.com](https://majorsyudio.gumroad.com) that will get you the entire death star and future updates, new modules, and enhancements like the Shima Hub and installer.
 
-![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/61650b58-a394-46b4-84b9-da20fb12991f)
+![image](https://github.com/aegis72/aegisflow_utility_nodes/assets/118572301/9690f299-f71e-48a9-a5ff-eb2331471d0e)
+
