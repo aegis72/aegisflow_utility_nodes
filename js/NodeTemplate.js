@@ -1,25 +1,86 @@
 import { app } from "../../scripts/app.js";
 
 // Define a custom node that selects an image based on a property (imageIndex), maintains aspect ratio
-function aflogo(){
+class aflogo extends LiteGraph.LGraphNode {
+    constructor() {
+        super();
+        this.title = "AegisFlow Logo";
 
-    this.isVirtualNode = true;
+        this.isVirtualNode = true;
 
-// Add a property for the image index and RGBA color overlay
-    this.addProperty("imageIndex", 0, "number", { min: 0, max: 25, title: "Image Index" });
-    this.addProperty("version", "20240302", "string", { title: "version" });
-    this.image = null;               // To store the loaded image
-    this.imageAspectRatio = 1;       // Default aspect ratio
-    this.loadImageByIndex(this.properties.imageIndex); // Load initial image based on index
-    // Set the initial title of the node to include the version
-    this.title = "\u00A0" + this.properties.version;
-    this.bgcolor = "rgba(31,31,31,0)";
-    this.color =   "rgba(31,31,31,0)";
-    this.title = "\u00A0"
+        // Add a property for the image index and RGBA color overlay
+        this.addProperty("imageIndex", 0, "number", { min: 0, max: 25, title: "Image Index" });
+        this.addProperty("version", "20240302", "string", { title: "version" });
+        this.image = null; // To store the loaded image
+        this.imageAspectRatio = 1; // Default aspect ratio
+        this.loadImageByIndex(this.properties.imageIndex); // Load initial image based on index
 
-    // Optional: Add a dummy input and output to satisfy application requirements
-//    this.addInput("input", null);  // The type can be adjusted based on your needs
-//    this.addOutput("output", null); // The type can be adjusted based on your needs
+        // Set the initial title of the node to include the version
+        this.title = "\u00A0" + this.properties.version;
+        this.bgcolor = "rgba(31,31,31,0)";
+        this.color = "rgba(31,31,31,0)";
+        this.title = "\u00A0";
+
+        // Optional: Add a dummy input and output to satisfy application requirements
+        //    this.addInput("input", null);  // The type can be adjusted based on your needs
+        //    this.addOutput("output", null); // The type can be adjusted based on your needs
+    }
+    // Method to load the image based on the provided index
+    loadImageByIndex(index) {
+        // Ensure the index is within bounds
+        var url = aflogo.imageURLs[Math.max(0, Math.min(index, aflogo.imageURLs.length - 1))];
+        this.loadImage(url);
+    }
+    // Method to load the image from URL
+    loadImage(url) {
+        var img = new Image();
+        img.src = url;
+        img.onload = () => {
+            this.image = img;
+            this.imageAspectRatio = img.width / img.height;
+            this.setDirtyCanvas(true, true); // Redraw the node
+        };
+    }
+    // Override the onPropertyChanged method to react to property changes
+    onPropertyChanged(name, value) {
+        if (name == "imageIndex") {
+            this.loadImageByIndex(value);
+            this.setDirtyCanvas(true, true); // Redraw the node
+        }
+
+        if (name === "version") {
+            // Update the node's title to reflect the new version
+            this.title = "v." + value;
+            this.setDirtyCanvas(true, true); // Redraw the node
+        }
+        this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
+        return true; // Indicate the property change has been handled
+    }
+    // Override onDrawBackground to display the image with aspect ratio preservation and apply an RGBA color overlay
+    onDrawBackground(ctx) {
+        if (!this.image) return; // Don't draw anything if the node is collapsed or the image isn't loaded
+
+
+        // Aspect ratio preservation code...
+        var nodeWidth = this.size[0];
+        var nodeHeight = this.size[1];
+        var nodeAspectRatio = nodeWidth / nodeHeight;
+        var drawWidth, drawHeight;
+
+        // Calculate the size of the image to be drawn based on the node's aspect ratio
+        if (this.imageAspectRatio > nodeAspectRatio) {
+            drawWidth = nodeWidth;
+            drawHeight = drawWidth / this.imageAspectRatio;
+        } else {
+            drawHeight = nodeHeight;
+            drawWidth = drawHeight * this.imageAspectRatio;
+        }
+
+        var x = (nodeWidth - drawWidth) / 2;
+        var y = (nodeHeight - drawHeight) / 2;
+
+        ctx.drawImage(this.image, x, y, drawWidth, drawHeight);
+    }
 }
 
 function randomString(length) {
@@ -56,69 +117,6 @@ aflogo.imageURLs = [
     "https://www.majorstud.io/wp-content/uploads/2024/03/ctrl-paint.png",//25    
 ];
 
-// Extend LiteGraph.LGraphNode
-aflogo.prototype = Object.create(LiteGraph.LGraphNode.prototype);
-aflogo.prototype.constructor = aflogo;
-
-// Method to load the image based on the provided index
-aflogo.prototype.loadImageByIndex = function(index) {
-    // Ensure the index is within bounds
-    var url = aflogo.imageURLs[Math.max(0, Math.min(index, aflogo.imageURLs.length - 1))];
-    this.loadImage(url);
-};
-
-// Method to load the image from URL
-aflogo.prototype.loadImage = function(url) {
-    var img = new Image();
-    img.src = url;
-    img.onload = () => {
-        this.image = img;
-        this.imageAspectRatio = img.width / img.height;
-        this.setDirtyCanvas(true, true); // Redraw the node
-    };
-};
-
-// Override the onPropertyChanged method to react to property changes
-aflogo.prototype.onPropertyChanged = function(name, value) {
-    if (name == "imageIndex") {
-        this.loadImageByIndex(value);
-        this.setDirtyCanvas(true, true); // Redraw the node
-    }
-
-    if (name === "version") {
-        // Update the node's title to reflect the new version
-        this.title = "v." + value;
-        this.setDirtyCanvas(true, true); // Redraw the node
-    }
-  this.setDirtyCanvas(true, true); // Redraw the node to reflect the title change
-    return true; // Indicate the property change has been handled
-};
-
-
-// Override onDrawBackground to display the image with aspect ratio preservation and apply an RGBA color overlay
-aflogo.prototype.onDrawBackground = function(ctx) {
-    if (!this.image) return; // Don't draw anything if the node is collapsed or the image isn't loaded
-
-    // Aspect ratio preservation code...
-    var nodeWidth = this.size[0];
-    var nodeHeight = this.size[1];
-    var nodeAspectRatio = nodeWidth / nodeHeight;
-    var drawWidth, drawHeight;
-
-    // Calculate the size of the image to be drawn based on the node's aspect ratio
-    if (this.imageAspectRatio > nodeAspectRatio) {
-        drawWidth = nodeWidth;
-        drawHeight = drawWidth / this.imageAspectRatio;
-    } else {
-        drawHeight = nodeHeight;
-        drawWidth = drawHeight * this.imageAspectRatio;
-    }
-
-    var x = (nodeWidth - drawWidth) / 2;
-    var y = (nodeHeight - drawHeight) / 2;
-
-    ctx.drawImage(this.image, x, y, drawWidth, drawHeight);
-};
 
 // Register the node in LiteGraph
 LiteGraph.registerNodeType("AegisFlow/aflogo", aflogo);
